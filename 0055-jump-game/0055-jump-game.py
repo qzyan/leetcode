@@ -1,4 +1,54 @@
+# greedy
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        if nums is None or len(nums) == 0:
+            return False
+        
+        right_most_index = 0
+        for index in range(len(nums)):
+            if index > right_most_index:
+                return False 
+            
+            right_most_index = max(right_most_index, index + nums[index])
+            
+            if right_most_index >= len(nums) - 1:
+                return True
+        
+        return False
+                
 
+"""
+# dp using the current reachable state to get the reachable state of later 
+
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        if nums is None or len(nums) == 0:
+            return False
+        
+        is_reachable = [False for _ in range(len(nums))]
+        is_reachable[0] = True
+        
+        for index in range(len(nums)):
+            if not is_reachable[index]:
+                return False
+            
+            max_step = nums[index]
+            for step in range(1, max_step + 1):
+                if index + step >= len(is_reachable):
+                    break
+                if is_reachable[index + step]:
+                    continue
+                
+                is_reachable[index + step] = True
+                
+                if is_reachable[-1]:
+                    return True
+        return True
+"""
+
+
+"""
+# dp using the previous reachable state to get the current reachable state 
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
         if nums is None or len(nums) == 0:
@@ -17,34 +67,8 @@ class Solution:
                 return False
         
         return is_reachable[-1]
-            
-                    
-        
-
 """
-# dp using the current reachable state to get the reachable state of later 
 
-class Solution:
-    def canJump(self, nums: List[int]) -> bool:
-        if nums is None or len(nums) == 0:
-            return False
-        
-        is_reachable = [False for _ in range(len(nums))]
-        is_reachable[0] = True
-        
-        for (index, num) in enumerate(nums):
-            if not is_reachable[index]:
-                return False
-            
-            for step in range(1, num + 1):
-                if index + step < len(is_reachable) and is_reachable[index + step]:
-                    continue
-                if index + step < len(is_reachable):
-                    is_reachable[index + step] = True
-            
-        return is_reachable[-1]
- 
-"""
 """
 # dfs
 class Solution:
