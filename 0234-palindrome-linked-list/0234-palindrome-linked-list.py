@@ -13,8 +13,8 @@ class Solution:
         # flip the second half back
         
         # reversed the half of the LinkedList
-        first_half_tail = self.find_first_half_tail(head)
-        reversed_head = self.reverse_the_second_half(first_half_tail.next)
+        second_half_head = self.find_second_half_head(head)
+        reversed_head = self.reverse_the_second_half(second_half_head)
         
         left = head
         right = reversed_head
@@ -32,7 +32,7 @@ class Solution:
         return result 
 
             
-    def find_first_half_tail(self, head):
+    def find_second_half_head(self, head):
         slow = head
         fast = head 
         
@@ -40,7 +40,7 @@ class Solution:
             slow = slow.next 
             fast = fast.next.next 
         
-        return slow
+        return slow.next
             
     def reverse_the_second_half(self, second_half_head):
         prev = None 
