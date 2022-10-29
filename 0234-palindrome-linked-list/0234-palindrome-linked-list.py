@@ -8,34 +8,46 @@ class Solution:
         if head is None or head.next is None:
             return True
         
+        # flip the second half 
+        # compare the first half with the second half
+        # flip the second half back
         
         # reversed the half of the LinkedList
-        second_half_head = self.find_second_half_head(head)
-        reversed_head = self.reverse_the_second_half(head, second_half_head)
+        first_half_tail = self.find_first_half_tail(head)
+        reversed_head = self.reverse_the_second_half(first_half_tail.next)
         
         left = head
         right = reversed_head
+        result = True
+        
         while right is not None:
             if left.val != right.val:
-                return False
+                result = False
             
             left = left.next
             right = right.next 
            
-        return True
+        self.reverse_the_second_half(reversed_head)
+        
+        node = head
+        while node is not None:
+            print(node.val)
+            node = node.next
+            
+        return result 
 
             
-    def find_second_half_head(self, head):
+    def find_first_half_tail(self, head):
         slow = head
         fast = head 
         
-        while fast is not None and fast.next is not None:
+        while fast.next is not None and fast.next.next is not None:
             slow = slow.next 
             fast = fast.next.next 
         
-        return slow if fast is None else slow.next 
+        return slow
             
-    def reverse_the_second_half(self, head, second_half_head):
+    def reverse_the_second_half(self, second_half_head):
         prev = None 
         curr = second_half_head
         
