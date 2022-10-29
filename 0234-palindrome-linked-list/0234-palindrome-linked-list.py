@@ -29,11 +29,6 @@ class Solution:
            
         self.reverse_the_second_half(reversed_head)
         
-        node = head
-        while node is not None:
-            print(node.val)
-            node = node.next
-            
         return result 
 
             
