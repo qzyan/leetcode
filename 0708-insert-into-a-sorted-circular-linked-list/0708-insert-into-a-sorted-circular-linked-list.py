@@ -22,26 +22,23 @@ class Solution:
         curr = head.next 
         
         is_iterate_all = False
+        to_insert = False
         
         while not is_iterate_all:
             if curr == head:
                 is_iterate_all = True
         
-            if curr.val > prev.val and insertVal <= curr.val and insertVal >= prev.val:
-                node_to_insert.next = curr
-                prev.next = node_to_insert
-                return head 
+            if curr.val >= prev.val and insertVal <= curr.val and insertVal >= prev.val:
+                to_insert = True 
             
             if curr.val < prev.val and (insertVal >= prev.val or insertVal <= curr.val):
+                to_insert = True 
+                
+            if to_insert:
                 node_to_insert.next = curr
                 prev.next = node_to_insert
                 return head 
             
-            if curr.val == prev.val and insertVal == curr.val and insertVal == prev.val:
-                node_to_insert.next = curr
-                prev.next = node_to_insert
-                return head 
-                        
             prev = curr
             curr = curr.next 
         
