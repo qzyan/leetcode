@@ -13,30 +13,28 @@ class Solution:
         if head is None:
             return None
         
-        self.flatten_dfs(head)
+        dummy = Node(0, None, head, None)
+        self.flatten_dfs(head, dummy)
+        
+        head.prev = None
+        dummy.next = None
         
         return head 
     
-    def flatten_dfs(self,head):
-        # return the tail of the linkedlist
-        if head.next is None and head.child is None:
-            return head
-    
+    # return the tail of the linkedlist
+    def flatten_dfs(self,head, prev_node):
+        if head is None:
+            return prev_node
+        
+        
         child_node = head.child 
-        next_node = head.next 
-        child_tail = None
-        next_tail = None
+        next_node = head.next
+        head.prev = prev_node
+        prev_node.next = head  
+        
+        child_node_tail = self.flatten_dfs(child_node, head)
+        next_node_tail = self.flatten_dfs(next_node, child_node_tail)
+        
         head.child = None
         
-        if child_node:
-            head.next = child_node
-            child_tail = self.flatten_dfs(child_node)
-            child_node.prev = head
-            
-        if next_node:
-            next_tail = self.flatten_dfs(next_node)
-            if child_tail:
-                child_tail.next = next_node
-                next_node.prev = child_tail
-        
-        return next_tail or child_tail
+        return next_node_tail
