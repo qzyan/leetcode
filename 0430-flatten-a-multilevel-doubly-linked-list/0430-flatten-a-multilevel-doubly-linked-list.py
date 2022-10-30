@@ -13,28 +13,28 @@ class Solution:
         if head is None:
             return None
         
+        stack = []
+        stack.append(head)
         dummy = Node(0, None, head, None)
-        self.flatten_dfs(head, dummy)
+        prev = dummy
         
+        while stack:
+            node = stack.pop()
+            
+            prev.next = node
+            node.prev = prev
+            
+            if node.next:
+                stack.append(node.next)
+            
+            if node.child:
+                stack.append(node.child)
+                node.child = None
+                
+            prev = node
+            
         head.prev = None
-        dummy.next = None
         
-        return head 
-    
-    # return the tail of the linkedlist
-    def flatten_dfs(self,head, prev_node):
-        if head is None:
-            return prev_node
-        
-        
-        child_node = head.child 
-        next_node = head.next
-        head.prev = prev_node
-        prev_node.next = head  
-        
-        child_node_tail = self.flatten_dfs(child_node, head)
-        next_node_tail = self.flatten_dfs(next_node, child_node_tail)
-        
-        head.child = None
-        
-        return next_node_tail
+        return head
+                
+            
