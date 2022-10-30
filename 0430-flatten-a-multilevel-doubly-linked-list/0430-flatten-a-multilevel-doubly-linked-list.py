@@ -13,43 +13,30 @@ class Solution:
         if head is None:
             return None
         
-        curr = head
-        while curr:
-            child_head = self.flatten(curr.child)
-            
-            if child_head:
-                self.append_after(curr, child_head)
-                curr.child = None
-            
-            curr = curr.next
+        self.flatten_dfs(head)
         
-        return head
+        return head 
     
-    def append_after(self, node, head):
-        tail = self.find_tail(head)
-        next_node = node.next 
-        
-        if next_node is None:
-            node.next = head
-            head.prev = node
-            return 
-        
-        node.next = head
-        next_node.prev = tail
-        
-        head.prev = node
-        tail.next = next_node
+    def flatten_dfs(self,head):
+        # return the tail of the linkedlist
+        if head.next is None and head.child is None:
+            return head
     
-    def find_tail(self, head):
-        if head is None:
-            return None
+        child_node = head.child 
+        next_node = head.next 
+        child_tail = None
+        next_tail = None
+        head.child = None
         
-        curr = head
-        prev = None
+        if child_node:
+            head.next = child_node
+            child_tail = self.flatten_dfs(child_node)
+            child_node.prev = head
+            
+        if next_node:
+            next_tail = self.flatten_dfs(next_node)
+            if child_tail:
+                child_tail.next = next_node
+                next_node.prev = child_tail
         
-        while curr:
-            prev = curr
-            curr = curr.next 
-            
-        return prev
-            
+        return next_tail or child_tail
