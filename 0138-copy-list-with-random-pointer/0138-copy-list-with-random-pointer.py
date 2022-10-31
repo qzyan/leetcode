@@ -15,14 +15,33 @@ class Solution:
         if head is None:
             return None
         
-        if head in self.node_dict:
-            return self.node_dict[head]
+        curr = head
+        while curr:
+            copied_node = Node(curr.val, None, None)
+            
+            copied_node.next = curr.next
+            curr.next = copied_node
+            
+            curr = curr.next.next 
         
-        new_node = Node(head.val, None, None)
-        self.node_dict[head] = new_node
+        curr = head
         
-        new_node.next = self.copyRandomList(head.next)
-        new_node.random = self.copyRandomList(head.random)
+        while curr:
+            curr.next.random = curr.random.next if curr.random else None 
+            
+            curr = curr.next.next 
+            
+        curr = head
+        copied_curr = curr.next 
+        copied_head = copied_curr
         
-        return new_node
+        while curr:
+            curr.next = copied_curr.next 
+            copied_curr.next = copied_curr.next.next if copied_curr.next else None
+            
+            curr = curr.next 
+            copied_curr = copied_curr.next 
+        
+        return copied_head
+        
             
