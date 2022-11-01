@@ -1,25 +1,39 @@
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        start = 0
-        end = len(strs) - 1
+        if strs is None or len(strs) == 0:
+            return ""
         
-        return self.lcp_helper(strs, start, end)
-    
-    def lcp_helper(self, strs, start, end):
-        if start == end:
-            return strs[start]
-        
-        mid = (start + end) // 2
-        lcp_left = self.lcp_helper(strs, start, mid)
-        lcp_right = self.lcp_helper(strs, mid + 1, end)
-        return self.lcp_between_two(lcp_left, lcp_right)
-    
-    def lcp_between_two(self, str1, str2):
-        min_len = min(len(str1), len(str2))
-        
-        for idx in range(min_len):
-            if str1[idx] != str2[idx]:
-                return str1[:idx]
+        min_len = float("inf")
+        for string in strs:
+            min_len = min(min_len, len(string))
             
-        return str1[:min_len]
+        if min_len == 0:
+            return ""
+    
+        left = 0
+        right = min_len - 1
+        
+        while left < right:
+            mid = (left + right) // 2
+            if self.is_lcp(strs, mid):
+                left = mid + 1
+            else:
+                right = mid - 1
+
+        if self.is_lcp(strs, left):
+            return strs[0][:left + 1]
+        
+        if self.is_lcp(strs, left - 1):
+            return strs[0][:left]
+        
+        return ""
+    
+    def is_lcp(self, strs, index):
+        for string in strs:
+            if not string.startswith(strs[0][:index + 1]):
+                return False
+        
+        return True
                 
+    
+    
