@@ -1,14 +1,25 @@
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        result_arr = []
-        strs_len = len(strs)
+        start = 0
+        end = len(strs) - 1
         
-        for index, char in enumerate(strs[0]):
-            for str_idx in range(1, strs_len):
-                string = strs[str_idx]
-                if index >= len(string) or string[index] != char:
-                    return "".join(result_arr)
-                
-            result_arr.append(char)
+        return self.lcp_helper(strs, start, end)
+    
+    def lcp_helper(self, strs, start, end):
+        if start == end:
+            return strs[start]
+        
+        mid = (start + end) // 2
+        lcp_left = self.lcp_helper(strs, start, mid)
+        lcp_right = self.lcp_helper(strs, mid + 1, end)
+        return self.lcp_between_two(lcp_left, lcp_right)
+    
+    def lcp_between_two(self, str1, str2):
+        min_len = min(len(str1), len(str2))
+        
+        for idx in range(min_len):
+            if str1[idx] != str2[idx]:
+                return str1[:idx]
             
-        return "".join(result_arr)
+        return str1[:min_len]
+                
