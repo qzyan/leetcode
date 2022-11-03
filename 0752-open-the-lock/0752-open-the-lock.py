@@ -22,9 +22,9 @@ class Solution:
                 if curr_code == target:
                     return step
 
-                next_codes = self.create_next_codes(curr_code, deadset)
+                next_codes = self.create_next_codes(curr_code)
                 for next_code in next_codes:
-                    if next_code in visited:
+                    if next_code in visited or next_code in deadset:
                         continue
                     visited.add(next_code)
                     queue.append(next_code)
@@ -33,25 +33,13 @@ class Solution:
             
         return -1
     
-    def create_next_codes(self, code, deadends):
+    def create_next_codes(self, code):
         results = []
-        code_digits = [*code]
-            
         for i in range(4):
-            ith_cur_digit = code_digits[i]
-            ith_new_digit_1 = str(DIGITS[(int(ith_cur_digit) + 1) % 10])
-            ith_new_digit_2 = str(DIGITS[(int(ith_cur_digit) - 1) % 10])
-            
-            code_digits[i] = ith_new_digit_1
-            new_code = "".join(code_digits)
-            if new_code not in deadends:
+            curr_digit = int(code[i])
+            for add in (-1, 1):
+                new_digit = (curr_digit + add) % 10
+                new_code = code[:i] + str(new_digit) + code[i + 1:]
                 results.append(new_code)
-            
-            code_digits[i] = ith_new_digit_2
-            new_code = "".join(code_digits)
-            if new_code not in deadends:
-                results.append(new_code)
-            
-            code_digits[i] = ith_cur_digit
         
         return results
