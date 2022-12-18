@@ -11,6 +11,8 @@ class Solution:
         high_bound = None
         
         while curr:
+            if curr.val == target:
+                return curr.val
             if curr.val > target:
                 high_bound = curr.val
                 curr = curr.left
