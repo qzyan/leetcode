@@ -7,19 +7,24 @@
 class BSTIterator:
 
     def __init__(self, root: Optional[TreeNode]):
-        # record the nodes whose right tree is not visited
+        # record the path to the curr node
         self.stack = []
         while root:
             self.stack.append(root)
             root = root.left
 
     def next(self) -> int:
-        curr = self.stack.pop()
-        if curr.right:
+        curr = self.stack[-1]
+        if not curr.right:
+            node = self.stack.pop()
+            while self.stack and self.stack[-1].right == node:
+                node = self.stack.pop()
+        else:
             node = curr.right
             while node:
                 self.stack.append(node)
                 node = node.left
+        
         return curr.val
                    
         
