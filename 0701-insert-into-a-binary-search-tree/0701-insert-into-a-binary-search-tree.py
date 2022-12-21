@@ -9,17 +9,18 @@ class Solution:
         if not root:
             return TreeNode(val)
         
-        self.dfs(root, val)
-        return root
-    
-    def dfs(self, root, val):
-        if not root:
-            node = TreeNode(val)
-            return node
-        
-        if root.val > val:
-            root.left = self.dfs(root.left, val)
+        father = None
+        curr = root
+        while curr:
+            father = curr
+            if curr.val > val:
+                curr = curr.left
+            else:
+                curr = curr.right
+                
+        if father.val < val:
+            father.right = TreeNode(val)
         else:
-            root.right = self.dfs(root.right, val)
+            father.left = TreeNode(val)
         
         return root
