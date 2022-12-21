@@ -8,8 +8,10 @@ class Solution:
     def findMode(self, root: Optional[TreeNode]) -> List[int]:
         stack = []
         curr = root
-        count_map = {}
         max_count = 0
+        curr_count = 0
+        prev_val = None
+        vals = []
         
         while curr or stack:
             while curr:
@@ -17,17 +19,25 @@ class Solution:
                 curr = curr.left
             
             curr = stack.pop()
-            count_map[curr.val] = count_map.get(curr.val, 0) + 1
-            max_count = max(count_map[curr.val], max_count)
+            if prev_val is None:
+                curr_count = 1
+                max_count = 1
+                vals = [curr.val]
+            else:
+                if prev_val == curr.val:
+                    curr_count += 1
+                if prev_val != curr.val:
+                    curr_count = 1
+                if curr_count == max_count:
+                    vals.append(curr.val)
+                elif curr_count > max_count:
+                    vals = [curr.val]
+                    max_count = curr_count
             
+            prev_val = curr.val
             if curr.right:
                 curr = curr.right
             else:
                 curr = None
-        
-        vals = []
-        for val, count in count_map.items():
-            if count == max_count:
-                vals.append(val)
-                
+                       
         return vals
