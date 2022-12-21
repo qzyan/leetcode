@@ -13,13 +13,17 @@ class BSTIterator:
             root = root.left
 
     def next(self) -> int:
-        curr = self.stack.pop()
+        curr = self.stack[-1]
         if curr.right:
             node = curr.right
             while node:
                 self.stack.append(node)
                 node = node.left
-            
+        else:
+            popped = self.stack.pop()
+            while self.stack and self.stack[-1].right == popped:
+                popped = self.stack.pop()
+                
         return curr.val
         
 
