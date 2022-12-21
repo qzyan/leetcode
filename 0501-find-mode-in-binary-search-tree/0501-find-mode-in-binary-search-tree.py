@@ -19,20 +19,16 @@ class Solution:
                 curr = curr.left
             
             curr = stack.pop()
-            if prev_val is None:
+
+            if prev_val == curr.val:
+                curr_count += 1
+            if prev_val != curr.val:
                 curr_count = 1
-                max_count = 1
+            if curr_count == max_count:
+                vals.append(curr.val)
+            elif curr_count > max_count:
                 vals = [curr.val]
-            else:
-                if prev_val == curr.val:
-                    curr_count += 1
-                if prev_val != curr.val:
-                    curr_count = 1
-                if curr_count == max_count:
-                    vals.append(curr.val)
-                elif curr_count > max_count:
-                    vals = [curr.val]
-                    max_count = curr_count
+                max_count = curr_count
             
             prev_val = curr.val
             if curr.right:
