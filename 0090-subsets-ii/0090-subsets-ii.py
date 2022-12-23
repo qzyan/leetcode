@@ -7,11 +7,11 @@ class Solution:
             return [[], nums[:]]
         
         nums = sorted(nums)
-        combs = [[], nums[:1]]
-        prev_combs = [nums[:1]]
+        combs = [[]]
+        prev_combs = None
         
-        for idx in range(1, len(nums)):
-            prev_num = nums[idx - 1]
+        for idx in range(0, len(nums)):
+            prev_num = nums[idx - 1] if idx >= 1 else None
             num = nums[idx]
             
             if prev_num != num:
