@@ -1,26 +1,22 @@
 class Solution:
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
-        if not nums:
-            return []
-        
-        if len(nums) == 1:
-            return [[], nums[:]]
-        
-        nums = sorted(nums)
-        combs = [[]]
-        prev_combs = None
-        
-        for idx in range(0, len(nums)):
-            prev_num = nums[idx - 1] if idx >= 1 else None
-            num = nums[idx]
-            
-            if prev_num != num:
-                new_combs = [comb + [num] for comb in combs]
-            else:
-                new_combs = [comb + [num] for comb in prev_combs]
-            
-            combs.extend(new_combs)
-            prev_combs = new_combs
-        
+        sorted_nums = sorted(nums)
+        combs = []
+        comb = []
+        self.backtrack(sorted_nums, 0, combs, comb)
         return combs
+    
+    def backtrack(self, nums, start_idx, combs, comb):
+        combs.append(comb[:])
         
+        for idx in range(start_idx, len(nums)):
+            if idx > start_idx and nums[idx] == nums[idx - 1]:
+                continue
+            
+            comb.append(nums[idx])
+            self.backtrack(nums, idx + 1, combs, comb)
+            comb.pop()
+            
+        return
+            
+    
