@@ -8,6 +8,9 @@ class Solution:
         row_size = len(board)
         col_size = len(board[0])
         
+        
+        # if there is a char in word that is not in the board
+        # return False
         chars_set = set()
         for row_idx in range(row_size):
             for col_idx in range(col_size):
@@ -16,8 +19,8 @@ class Solution:
         for char in word:
             if char not in chars_set:
                 return False
+        
             
-
         visited = [[False] * col_size for _ in range(row_size)]
         for row_idx in range(row_size):
             for col_idx in range(col_size):
@@ -27,6 +30,7 @@ class Solution:
                 visited[row_idx][col_idx] = False
         return False
     
+    # start from the pos, see if there is a path that math word[curr_idx: ]
     def dfs(self, board, row_idx, col_idx, word, visited, curr_idx):
         char = board[row_idx][col_idx]
         if char != word[curr_idx]:
@@ -48,7 +52,7 @@ class Solution:
             if self.dfs(board, nxt_row, nxt_col, word, visited, curr_idx + 1):
                 return True
             visited[nxt_row][nxt_col] = False
-        
+            
         return False
     
     def is_inbound(self, nxt_pos, board):
