@@ -5,78 +5,79 @@ class Solution:
         word_dict = set(wordList)
         if endWord not in word_dict:
             return []
-
+        
         graph = self.build_graph(beginWord, endWord, word_dict)
-        if not graph:
+        print(graph)
+        if graph is None:
             return []
         
         path = [beginWord]
         paths = []
         not_viable = set()
-        self.backtrack(path, paths, endWord, graph, not_viable)
+        self.backtrack(graph, path, paths, not_viable, endWord)
+        
         return paths
     
-    def backtrack(self, path, paths, endWord, graph, not_viable):
-        word = path[-1]
-        if word == endWord:
+    def backtrack(self, graph, path, paths, not_viable, endWord):
+        if path[-1] in not_viable:
+            return False
+            
+        if path[-1] == endWord:
             paths.append(path[:])
             return True
-        if word in not_viable:
-            return False
         
-        find_end_word = False
-        neighbors = graph.get(word, [])
+        curr_word = path[-1]
+        neighbors = graph.get(curr_word, [])
+        can_reach_endword = False
         for neighbor in neighbors:
             path.append(neighbor)
-            if self.backtrack(path, paths, endWord, graph, not_viable):
-                find_end_word = True
+            if self.backtrack(graph, path, paths, not_viable, endWord):
+                can_reach_endword = True
             path.pop()
         
-        if not find_end_word:
-            not_viable.add(word)
-        return find_end_word
-            
+        if not can_reach_endword:
+            not_viable.add(curr_word)
+        
+        return can_reach_endword
+    
     def build_graph(self, beginWord, endWord, word_dict):
-        graph = {}
+        distance = {
+            beginWord: 0
+        }
         queue = collections.deque([beginWord])
-        word_dict_copy = set(word_dict)
-        word_dict_copy.discard(beginWord)
-        find_end_word = False
+        graph = {}
         
         while queue:
             size = len(queue)
-            next_level_words = set()
-            # iterate over each word on curr level, add the neighbor to the graph[curr]
             for _ in range(size):
-                curr = queue.popleft()
-                graph[curr] = []
-                
-                neighbors = self.get_neighbors(curr, word_dict_copy)
-                for neighbor in neighbors:
-                    graph[curr].append(neighbor)
-                    next_level_words.add(neighbor)
-            
-            # endWord is in the next level
-            if endWord in next_level_words:
-                find_end_word = True
-                break
-            
-            # discard all the words on the next level from the dict
-            # append the next_level_nodes to the queue
-            for word in next_level_words:
-                word_dict_copy.discard(word)
-                queue.append(word)
-        
-        if not find_end_word:
-            return None
-        return graph
+                curr_word = queue.popleft()
+                if curr_word == endWord:
+                    return graph                    
+                graph[curr_word] = []
+                next_words = self.find_neighbors(curr_word, word_dict)
+                for next_word in next_words:
+                    # next_word never visited before
+                    # add to queue
+                    if next_word not in distance:
+                        queue.append(next_word)
+                        distance[next_word] = distance[curr_word] + 1
+                        graph[curr_word].append(next_word)
+                        continue
+                    # next_word has been visited and is on the next level
+                    # do not append to queue but add to the graph[curr_word] neighbors
+                    if distance[next_word] == distance[curr_word] + 1:
+                        graph[curr_word].append(next_word)
+                                
+        return None
     
-    def get_neighbors(self, word, word_dict_copy):
+    def find_neighbors(self, curr_word, word_dict):
         neighbors = []
-        for idx in range(len(word)):
+        for idx in range(len(curr_word)):
             for char in 'abcdefghijklmnopqrstuvwxyz':
-                new_word = word[:idx] + char + word[idx + 1:]
-                if new_word in word_dict_copy:
+                if char == curr_word[idx]:
+                    continue
+                new_word = curr_word[:idx] + char + curr_word[idx + 1:]
+                if new_word in word_dict:
                     neighbors.append(new_word)
-        
+                    
         return neighbors
