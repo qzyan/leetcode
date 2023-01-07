@@ -1,17 +1,14 @@
 class Solution:
-    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:        
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        total_gas = 0
+        curr_gas = 0
         start_idx = 0
-        while start_idx < len(gas):
-            gas_in_tank = 0
-            for step in range(len(gas)):
-                curr_idx = (start_idx + step) % len(gas)
-                gas_in_tank += gas[curr_idx] - cost[curr_idx]
-                if gas_in_tank < 0:
-                    start_idx = max(curr_idx, start_idx) + 1
-                    break
-            else:
-                return start_idx
-        
-        return -1
+        for idx in range(len(gas)):
+            total_gas += gas[idx] - cost[idx]
+            curr_gas += gas[idx] - cost[idx]
+            if curr_gas < 0:
+                start_idx = idx + 1
+                curr_gas = 0
                 
-            
+        return -1 if total_gas < 0 else start_idx
+                
