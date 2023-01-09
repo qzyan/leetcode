@@ -14,7 +14,12 @@ class Solution:
         if root is None:
             return
         
-        vals.append(root.val)
-        self.dfs(root.left, vals)
-        self.dfs(root.right, vals)
-        
+        stack = [root]
+        while stack:
+            curr = stack.pop()
+            vals.append(curr.val)
+            
+            if curr.right:
+                stack.append(curr.right)
+            if curr.left:
+                stack.append(curr.left)
