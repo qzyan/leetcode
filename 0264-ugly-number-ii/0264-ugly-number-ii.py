@@ -1,22 +1,24 @@
-import heapq
-
 class Solution:
     def nthUglyNumber(self, n: int) -> int:
-        heap = [1]
-        inheap = set([1])
-        heapq.heapify(heap)
-        curr_ugly = None
+        dp = [1]
+        p2 = 0
+        p3 = 0
+        p5 = 0
         
-        for _ in range(n):
-            curr_ugly = heapq.heappop(heap)
+        while len(dp) < n:
+            next_ugly_num = min(
+                dp[p2] * 2,
+                dp[p3] * 3,
+                dp[p5] * 5
+            )
             
-            for factor in [2, 3, 5]:
-                new_ugly = factor * curr_ugly
-                if new_ugly in inheap:
-                    continue
-                heapq.heappush(heap, new_ugly)
-                inheap.add(new_ugly)
-                
-        return curr_ugly
+            dp.append(next_ugly_num)
+            
+            if next_ugly_num == dp[p2] * 2:
+                p2 += 1
+            if next_ugly_num == dp[p3] * 3:
+                p3 += 1
+            if next_ugly_num == dp[p5] * 5:
+                p5 += 1
         
-        
+        return dp[-1]
