@@ -10,31 +10,28 @@ class RandomizedCollection:
         index = len(self.vals) - 1
         
         if val in self.val_indexes_mapping:
-            already_exists = True
             self.val_indexes_mapping[val].add(index)
         else:
-            already_exists = False
             self.val_indexes_mapping[val] = {index}
             
-        return not already_exists
+        return len(self.val_indexes_mapping[val]) == 1
         
     def remove(self, val: int) -> bool:
-        if val not in self.val_indexes_mapping:
+        val_indexes = self.val_indexes_mapping.get(val)
+        # val never appeared or all val have been removed
+        if not val_indexes or len(val_indexes) == 0:
             return False
         
         index_to_update = self.val_indexes_mapping[val].pop()
         last_index = len(self.vals) - 1
         last_val = self.vals[last_index]
         
-        if len(self.val_indexes_mapping[val]) == 0:
-            self.val_indexes_mapping.pop(val)
+        # update the todelete ele to last_val
+        self.vals[index_to_update] = last_val
+        self.val_indexes_mapping[last_val].add(index_to_update)
         
-        if index_to_update != last_index:
-            self.vals[index_to_update] = last_val
-            
-            self.val_indexes_mapping[last_val].discard(last_index)
-            self.val_indexes_mapping[last_val].add(index_to_update)
-        
+        # delete the last ele in list
+        self.val_indexes_mapping[last_val].discard(last_index)
         self.vals.pop()
         
         return True
