@@ -1,24 +1,17 @@
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
-        memo = {}
-        recorder = {'longest_len': 0}
         nums_set = set(nums)
-        for start_ele in nums:
-            self.dfs(start_ele, memo, recorder, nums_set)
-        
-        return recorder['longest_len']
+        max_len = 0
+        for start_num in nums:
+            if start_num - 1 in nums_set:
+                continue
             
-    def dfs(self, start_ele, memo, recorder, nums_set):
-        if start_ele in memo:
-            return memo[start_ele]
-        
-        next_num = start_ele + 1
-        if next_num in nums_set:            
-            memo[start_ele] = self.dfs(next_num, memo, recorder, nums_set) + 1
-        else:
-            memo[start_ele] = 1
+            curr_len = 0
+            curr_num = start_num
+            while curr_num in nums_set:
+                curr_len += 1
+                curr_num += 1
+                
+            max_len = max(max_len, curr_len)
             
-        recorder['longest_len'] = max(recorder['longest_len'], memo[start_ele])
-        
-        return memo[start_ele]    
-        
+        return max_len
