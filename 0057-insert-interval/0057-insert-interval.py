@@ -12,7 +12,46 @@ class Solution:
             return intervals[:left_idx + 1] + [newInterval] + intervals[right_idx:]
         
         return self.combine_overlap(intervals, newInterval, left_idx, right_idx)
+
+    # binary search
+    def find_left_bound(self, intervals, newInterval):
+        left = 0
+        right = len(intervals) - 1
         
+        while left + 1 < right:
+            mid = (left + right) // 2
+            pivot_interval = intervals[mid]
+            if pivot_interval[1] < newInterval[0]:
+                left = mid
+            else:
+                right = mid
+        
+        if intervals[right][1] < newInterval[0]:
+            return right
+        if intervals[left][1] < newInterval[0]:
+            return left
+        return -1
+             
+    def find_right_bound(self, intervals, newInterval):
+        left = 0
+        right = len(intervals) - 1
+        
+        while left + 1 < right:
+            mid = (left + right) // 2
+            pivot_interval = intervals[mid]
+            if pivot_interval[0] > newInterval[1]:
+                right = mid
+            else:
+                left = mid
+                
+        if intervals[left][0] > newInterval[1]:
+            return left
+        if intervals[right][0] > newInterval[1]:
+            return right
+        return len(intervals)
+            
+    """
+    # Linear search 
     def find_left_bound(self, intervals, newInterval):
         idx = 0
         while idx < len(intervals) and intervals[idx][1] < newInterval[0]:
@@ -26,7 +65,8 @@ class Solution:
             idx -= 1
             
         return idx + 1
-    
+    """
+
     def combine_overlap(self, intervals, newInterval, left_idx, right_idx):
         combined_interval_start = min(intervals[left_idx + 1][0], newInterval[0])
         combined_interval_end = max(intervals[right_idx - 1][1], newInterval[1])
