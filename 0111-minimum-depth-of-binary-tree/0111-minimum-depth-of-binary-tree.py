@@ -1,4 +1,3 @@
-import collections
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -7,29 +6,16 @@ import collections
 #         self.right = right
 class Solution:
     def minDepth(self, root: Optional[TreeNode]) -> int:
-        if not root:
+        if root is None:
             return 0
         
-        queue = collections.deque()
-        queue.append(root)
-        min_depth = 1
+        if root.left is None and root.right is None:
+            return 1
         
-        while queue:
-            size = len(queue)
-            found_leaf_node = False
-            for _ in range(size):
-                curr_node = queue.popleft()
-                if curr_node.left:
-                    queue.append(curr_node.left)
-                if curr_node.right:
-                    queue.append(curr_node.right)
-                if not curr_node.left and not curr_node.right:
-                    found_leaf_node = True
-                    break
-            else:
-                min_depth += 1
-                
-            if found_leaf_node:
-                break
+        child_min_depth = float('inf')
+        if root.left is not None:
+            child_min_depth = min(self.minDepth(root.left), child_min_depth)
+        if root.right is not None:
+            child_min_depth = min(self.minDepth(root.right), child_min_depth)
         
-        return min_depth
+        return child_min_depth + 1
