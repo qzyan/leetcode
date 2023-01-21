@@ -6,13 +6,13 @@ class Solution:
         return ips
     
     def backtrack(self, ip, ips, start_idx, s):
-        # ip will have more than 4 ints, return
-        if len(ip) > 4:
-            return
-        
         # ip has exact 4 ints and all chars have been used
         if len(ip) == 4 and start_idx == len(s):
             ips.append('.'.join(ip))
+            return
+        
+        # ip has 4 ints but not all chars are used
+        if len(ip) == 4:
             return
         
         for i in range(1, 4):
