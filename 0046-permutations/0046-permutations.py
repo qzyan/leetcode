@@ -1,23 +1,26 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        permut = []
-        permuts = []
-        visited = set()
-        self.backtrack(permut, permuts, visited, nums, 0)
-        return permuts
+        permutations = []
+        permutation = []
+        is_visited = [False] * len(nums)
+        self.dfs(nums, permutation, permutations, is_visited)
+        
+        
+        return permutations
     
-    def backtrack(self, permut, permuts, visited, nums, size):
-        if size == len(nums):
-            permuts.append(permut[:])
+    def dfs(self, nums, permutation, permutations, is_visited):
+        if len(permutation) == len(nums):
+            permutations.append(permutation[:])
             return
         
-        for num in nums:
-            if num in visited:
+        for idx, num in enumerate(nums):
+            if is_visited[idx]:
                 continue
-                
-            permut.append(num)
-            visited.add(num)
-            self.backtrack(permut, permuts, visited, nums, size + 1)
-            visited.remove(num)
-            permut.pop()
-        
+            
+            permutation.append(num)
+            is_visited[idx] = True
+            self.dfs(nums, permutation, permutations, is_visited)
+            is_visited[idx] = False
+            permutation.pop()
+            
+            
