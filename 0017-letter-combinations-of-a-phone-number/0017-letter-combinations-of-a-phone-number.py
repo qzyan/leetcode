@@ -1,34 +1,39 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        num_char_dict = {
-            2: ("a", "b", "c"),
-            3: ("d", "e", "f"),
-            4: ("g", "h", "i"),
-            5: ("j", "k", "l"),
-            6: ("m", "n", "o"),
-            7: ("p", "q", "r", "s"),
-            8: ("t", "u", "v"),
-            9: ("w", "x", "y", 'z')
-        }
         if not digits:
             return []
-        
-        comb = []
-        combs = []
-        self.backtrack(num_char_dict, comb, combs, 0, digits)
-        return combs
+        # build the num_char mapping
+        num_char_mapping = self.build_mapping()
+        results = [[]]
+        for num in digits:
+            new_results = []
+            for result in results:
+                for char in num_char_mapping[num]:  
+                    new_result = result[:]
+                    new_result.append(char)
+                    new_results.append(new_result)
+            results = new_results
+            
+        return map(lambda arr : "".join(arr), results)
     
-    def backtrack(self, num_char_dict, comb, combs, idx, digits):
-        if idx == len(digits):
-            combs.append(''.join(comb))
-            return
-        
-        digit = int(digits[idx])
-        chars = num_char_dict[digit]
-        for char in chars:
-            comb.append(char)
-            self.backtrack(num_char_dict, comb, combs, idx + 1, digits)
-            comb.pop()
-        
-        
+    def build_mapping(self):
+        return {
+            "2": ["a", "b", "c"],
+            "3": ["d", "e", "f"],
+            "4": ["g", "h", "i"],
+            "5": ["j", "k", "l"],
+            "6": ["m", "n", "o"],
+            "7": ["p", "q", "r", "s"],
+            "8": ["t", "u", "v"],
+            "9": ["w", "x", "y", "z"]
+        }
+        # iterate over each num in the digits string
+            # iternate over each letter in the mapping
+                # iterate over each result in results
+                    # append the letter to the result
+                    # append the result to new_results
+            # result = new_results
+                    
+        # map the results to string results
+        # return the results
         
