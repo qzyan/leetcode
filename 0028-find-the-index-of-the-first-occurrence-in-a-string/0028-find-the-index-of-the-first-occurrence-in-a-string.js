@@ -4,9 +4,20 @@
  * @return {number}
  */
 var strStr = function(haystack, needle) {
-    for (let left = 0; left < haystack.length - needle.length + 1; left++) {
-        if (haystack.slice(left, left + needle.length) === needle) {
-            return left;
+    if (!needle) {
+        return 0
+    }
+
+    for (let i = 0; i < haystack.length - needle.length + 1; i++) {
+        let isFound = true
+        for (let j = 0; j < needle.length; j++) {
+            if (haystack[i + j] != needle[j]) {
+                isFound = false
+                break
+            }
+        }
+        if (isFound) {
+            return i
         }
     }
     
