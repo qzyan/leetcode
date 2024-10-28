@@ -1,56 +1,39 @@
 class Solution {
-    public class Pair {
-        public int start_idx;
-        public int length;
-        
-        public Pair(int start_idx, int length) {
-            this.start_idx = start_idx;
-            this.length = length;
-        }
-    }
-
     public String longestPalindrome(String s) {
         if (s == null || s.length() == 0) {
             return "";
         }
         
-        int max_len = 0;
-        int start_idx = -1;
-        for (int i = 0; i < 2 * s.length() - 1; i++) {
-            int left, right;
-            if (i % 2 == 0) {
-                left = i / 2;
-                right = i / 2;
-            } else {
-                left = i / 2;
-                right = i / 2 + 1;
+        Boolean[][] is_pals = new Boolean[s.length()][s.length()];
+        for (int row_idx = 0; row_idx < s.length(); row_idx++) {
+            for (int col_idx = 0; col_idx < s.length(); col_idx++) {
+                is_pals[row_idx][col_idx] = false;
             }
-            
-            Pair answer = find_longest(s, left, right);
-            
-            if (answer.length > max_len) {
-                max_len = answer.length;
-                start_idx = answer.start_idx;
+        }
+        
+        for (int idx = 0; idx < s.length(); idx++) {
+            is_pals[idx][idx] = true;
+        }
+        
+        for (int idx = 1; idx < s.length(); idx++) {
+            is_pals[idx][idx - 1] = true;
+        }
+        
+        int start_idx = 0;
+        int max_len = 1;
+        
+        for (int len = 2; len < s.length() + 1; len++) {
+            for (int row_idx = 0; row_idx < s.length() - len + 1; row_idx++) {
+                int col_idx = row_idx + len - 1;
+                is_pals[row_idx][col_idx] = is_pals[row_idx + 1][col_idx - 1] && s.charAt(row_idx) == s.charAt(col_idx);
+                
+                if (is_pals[row_idx][col_idx]) {
+                    max_len = len;
+                    start_idx = row_idx;
+                }
             }
         }
         
         return s.substring(start_idx, start_idx + max_len);
-    }
-    
-    public Pair find_longest(String s, int left, int right) {
-        if (s.charAt(left) != s.charAt(right)) {
-            return new Pair(-1, -1);
-        }
-        
-        while (left >= 0 && right < s.length()) {
-            if (s.charAt(left) != s.charAt(right)) {
-                break;
-            }
-            
-            left -= 1;
-            right += 1;
-        }
-        
-        return new Pair(left + 1, right - left - 1);
     }
 }
