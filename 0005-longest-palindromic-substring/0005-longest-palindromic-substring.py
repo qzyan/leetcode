@@ -1,28 +1,43 @@
-class Solution:
-    def longestPalindrome(self, s: str) -> str:
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
         if not s:
             return ""
         
-        
-        size = len(s)
-        is_palindrome = [[False] * size for _ in range(size)]
-        
-        for i in range(size):
-            is_palindrome[i][i] = True
+        max_len = 0
+        longest_pal = ""
+
+        for i in range(2 * len(s) - 1):
+            if i % 2 == 0:
+                left, right = i // 2, i // 2
+            else:
+                left, right  = i // 2, i // 2 + 1
+                
+            start_idx, length = self.find_longest_pal(s, left, right)
             
-        for i in range(1, size):
-            is_palindrome[i][i - 1] = True
+            if length > max_len:
+                max_len = length
+                longest_pal = s[start_idx: start_idx + length]
                 
-        longest_start = 0
-        max_len = 1
-        for length in range(2, size + 1):
-            for start in range(size - length + 1):
-                end = start + length - 1
-                is_palindrome[start][end] = is_palindrome[start + 1][end - 1] and s[start] == s[end]
+        return longest_pal
                 
-                if is_palindrome[start][end] and length > max_len:
-                    longest_start = start
-                    max_len = length
-                    
-        return s[longest_start:longest_start + max_len]
-                    
+    def find_longest_pal(self, s, left, right):
+        if s[left] != s[right]:
+            return -1, -1
+        
+        while left >= 0 and right < len(s):
+            if s[left] != s[right]:
+                break
+                
+            left -= 1
+            right += 1
+            
+        return left + 1, right - left - 1
+            
+                
+            
+                
+                
