@@ -4,21 +4,45 @@ class Solution:
             return 0
         if sum(nums) < target:
             return 0
-
-        slow, fast = 0, 0
-        total = 0
-        mini_len = float('inf');
-        while fast < len(nums):
-            while total < target and fast < len(nums):
-                total += nums[fast]
-                fast += 1
-            
-
-            while slow < fast and total >= target:
-                total -= nums[slow]
-                slow += 1
-
-            mini_len = min(mini_len, fast - slow + 1)
-            
-        return mini_len if mini_len < float('inf') else 0
         
+        left = 1
+        right = len(nums)
+        
+        while left + 1 < right:
+            mid = (left + right) //2 
+            if self.has_subarray_larger_than_target(target, nums, mid):
+                right = mid
+            else:
+                left = mid
+        
+        if self.has_subarray_larger_than_target(target, nums, left):
+            return left
+        
+        if self.has_subarray_larger_than_target(target, nums, right):
+            return right
+        
+        return 0
+    
+    def has_subarray_larger_than_target(self, target, nums, length):
+        total = 0
+        right = 0
+        left = 0
+        
+        while right < length:
+            total += nums[right]
+            right += 1
+        
+        if total >= target:
+            return True
+        
+        while right < len(nums):                        
+            total += nums[right]
+            total -= nums[left]
+            right +=1
+            left += 1
+            
+            if total >= target:
+                return True
+                
+        return False
+            
