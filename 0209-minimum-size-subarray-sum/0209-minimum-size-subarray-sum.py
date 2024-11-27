@@ -2,7 +2,9 @@ class Solution:
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
         if not nums:
             return 0
-        
+        if sum(nums) < target:
+            return 0
+
         slow, fast = 0, 0
         total = 0
         mini_len = float('inf');
@@ -11,9 +13,7 @@ class Solution:
                 total += nums[fast]
                 fast += 1
             
-            if total < target:
-                break
-        
+
             while slow < fast and total >= target:
                 total -= nums[slow]
                 slow += 1
