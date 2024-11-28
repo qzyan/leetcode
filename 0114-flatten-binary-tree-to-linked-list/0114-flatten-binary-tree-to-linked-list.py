@@ -9,24 +9,31 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
-        # iterate over each node -> node.right
-            # if node has no left node, continue
-            # find the right_most of the left node
-            # append the right node to right_most.right
-            # node.right = node.left
-            # node.left = None
+        self.helper(root)
         
-        while root:
-            if root.left is None:
-                root = root.right
-                continue
-            
-            node = root.left
-            while node.right:
-                node = node.right
-            node.right = root.right
-            
+    def helper(self, root):
+        if root is None:
+            return None
+        
+        if root.left is None and root.right is None:
+            return root
+
+        flattened_left_tail = self.helper(root.left)
+        flattened_right_tail = self.helper(root.right)
+         
+        if root.left is None:
+            return flattened_right_tail
+        
+        if root.right is None:
             root.right = root.left
             root.left = None
-            
-            root = root.right
+            return flattened_left_tail
+
+        right_head = root.right
+        root.right = root.left
+        flattened_left_tail.right = right_head
+        root.left = None
+        
+        return flattened_right_tail
+        
+        
