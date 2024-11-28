@@ -7,35 +7,26 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        has_p, has_q, lca = self.lca_helper(root, p, q)
+        is_p_found, is_q_found, lca = self.lca_helper(root, p, q)
+        
         return lca
-
-    # return if the root tree contains p, q, and the common ancestor 
-    # (cotain_p, contain_q, ca)
+    
     def lca_helper(self, root, p, q):
         if root is None:
             return False, False, None
         
-        left_has_p, left_has_q, left_lca = self.lca_helper(root.left, p, q)
-        # left sub tree contains lca
-        if left_has_p and left_has_q:
-            return True, True, left_lca
+        is_p_found_in_left, is_q_found_in_left, left_lca = self.lca_helper(root.left, p, q)
+        is_p_found_in_right, is_q_found_in_right, right_lca = self.lca_helper(root.right, p, q)
         
-        right_has_p, right_has_q, right_lca = self.lca_helper(root.right, p, q)
-        # right sub tree contains lca
-        if right_has_p and right_has_q:
-            return True, True, right_lca
+        is_p_found = is_p_found_in_left or is_p_found_in_right or root == p
+        is_q_found = is_q_found_in_left or is_q_found_in_right or root == q
         
-        has_p = right_has_p or left_has_p or root == p
-        has_q = right_has_q or left_has_q or root == q
         lca = None
-        if has_p and has_q:
-            lca = root
+        if is_p_found and is_q_found:
+            lca = left_lca or right_lca or root
         
-        return has_p, has_q, lca
-         
+        return is_p_found, is_q_found, lca
 
         
-
-
-
+        
+        
