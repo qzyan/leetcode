@@ -9,31 +9,24 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
-        self.helper(root)
-        
-    def helper(self, root):
-        if root is None:
-            return None
-        
-        if root.left is None and root.right is None:
-            return root
-
-        flattened_left_tail = self.helper(root.left)
-        flattened_right_tail = self.helper(root.right)
-         
-        if root.left is None:
-            return flattened_right_tail
-        
-        if root.right is None:
+        while root:
+            left = root.left
+            if left is None:
+                root = root.right
+                continue
+            
+            left_rightest = self.find_rightest(left)
+            left_rightest.right = root.right
             root.right = root.left
             root.left = None
-            return flattened_left_tail
-
-        right_head = root.right
-        root.right = root.left
-        flattened_left_tail.right = right_head
-        root.left = None
-        
-        return flattened_right_tail
-        
-        
+            root = root.right
+            
+    def find_rightest(self, root):
+        while root.right:
+            root = root.right
+            
+        return root
+            
+            
+            
+            
