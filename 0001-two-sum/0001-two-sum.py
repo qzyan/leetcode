@@ -1,15 +1,14 @@
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
-        if not nums:
-            return [-1, -1]
-        
-        visited = dict();
+        mapping = {};
         for i in range(len(nums)):
-            needed = target - nums[i]
-            if needed in visited:
-                return [i, visited[needed]]
-            else:
-                visited[nums[i]] = i
-                
-        return [-1, -1]
+            num_a = nums[i]
+            num_b = target - num_a
             
+            if num_b in mapping:
+                return (mapping[num_b], i)
+            
+            mapping[num_a] = i
+            
+        return [-1, -1]
+        
