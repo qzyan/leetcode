@@ -7,26 +7,21 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        is_p_found, is_q_found, lca = self.lca_helper(root, p, q)
-        
-        return lca
-    
-    def lca_helper(self, root, p, q):
         if root is None:
-            return False, False, None
+            return None
         
-        is_p_found_in_left, is_q_found_in_left, left_lca = self.lca_helper(root.left, p, q)
-        is_p_found_in_right, is_q_found_in_right, right_lca = self.lca_helper(root.right, p, q)
+        if root == p or root == q:
+            return root
         
-        is_p_found = is_p_found_in_left or is_p_found_in_right or root == p
-        is_q_found = is_q_found_in_left or is_q_found_in_right or root == q
+        left_result = self.lowestCommonAncestor(root.left, p, q)
+        right_result = self.lowestCommonAncestor(root.right, p, q)
         
-        lca = None
-        if is_p_found and is_q_found:
-            lca = left_lca or right_lca or root
+        if left_result and not right_result:
+            return left_result
         
-        return is_p_found, is_q_found, lca
-
+        if right_result and not left_result:
+            return right_result
         
-        
+        if left_result and right_result:
+            return root
         
