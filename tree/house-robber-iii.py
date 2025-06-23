@@ -6,16 +6,16 @@
 #         self.right = right
 class Solution:
     def rob(self, root: Optional[TreeNode]) -> int:
-        rob_root_max, no_rob_root_max = self.rob_helper(root)
-        return max(rob_root_max, no_rob_root_max)
+        root_max, children_max = self.rob_helper(root)
+        return root_max
 
     def rob_helper(self, root):
         if root is None:
             return (0, 0)
 
-        l_rob_root_max, l_no_rob_root_max = self.rob_helper(root.left)
-        r_rob_root_max, r_no_rob_root_max = self.rob_helper(root.right)
+        l_root_max, l_children_max = self.rob_helper(root.left)
+        r_root_max, r_children_max = self.rob_helper(root.right)
 
-        rob_root_max = root.val + l_no_rob_root_max + r_no_rob_root_max
-        no_rob_root_max = max(l_rob_root_max, l_no_rob_root_max) + max(r_rob_root_max, r_no_rob_root_max)
-        return (rob_root_max, no_rob_root_max)
+        root_max = max(l_children_max + r_children_max + root.val, l_root_max + r_root_max)
+        children_max = l_root_max + r_root_max
+        return (root_max, children_max)
