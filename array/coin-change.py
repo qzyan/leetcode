@@ -9,7 +9,7 @@ class Solution:
                 continue
 
             for j in range(1, i // 2 + 1):
-                if dp[j] == -1 or dp[i - j] == -1:
+                if dp[j] == float("inf") or dp[i - j] == float("inf"):
                     continue
                 
                 dp[i] = min(dp[i], dp[j] + dp[i - j])
