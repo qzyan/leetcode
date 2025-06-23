@@ -17,5 +17,5 @@ class Solution:
         r_rob_root_max, r_no_rob_root_max = self.rob_helper(root.right)
 
         rob_root_max = root.val + l_no_rob_root_max + r_no_rob_root_max
-        no_rob_root_max = l_rob_root_max + r_rob_root_max
+        no_rob_root_max = max(l_rob_root_max, l_no_rob_root_max) + max(r_rob_root_max, r_no_rob_root_max)
         return (rob_root_max, no_rob_root_max)
