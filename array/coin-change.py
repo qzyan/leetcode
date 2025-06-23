@@ -8,11 +8,15 @@ class Solution:
                 dp[i] = 1
                 continue
 
-            for j in range(1, i // 2 + 1):
-                if dp[j] == float("inf") or dp[i - j] == float("inf"):
+            for coin in coin_set:
+                if i - coin < 0:
+                    continue
+
+                if dp[i - coin] == float("inf"):
                     continue
                 
-                dp[i] = min(dp[i], dp[j] + dp[i - j])
+                dp[i] = min(dp[i], dp[i - coin] + 1)
+
 
         return dp[amount] if dp[amount] != float("inf") else -1
                 
