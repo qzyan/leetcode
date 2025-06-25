@@ -20,6 +20,6 @@ class Solution:
                     if col - row > right - left:
                         right = col
                         left = row
-        print(dp)
+
         return s[left:right + 1]
 
