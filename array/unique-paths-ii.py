@@ -13,7 +13,7 @@ class Solution:
             if obstacleGrid[0][i] == GridType.BLOCK:
                 dp[i] = 0
             else:
-                dp[i] = 1
+                dp[i] = dp[i - 1]
 
         for row in range(1, len(obstacleGrid)):
             if obstacleGrid[row][0] == GridType.BLOCK:
