@@ -16,10 +16,10 @@ class Solution:
         for row in range(len(s) - 2, -1, -1):
             for col in range(row + 1, len(s)):
                 if dp[row + 1][col - 1] == True and s[row] == s[col]:
-                    dp[row][col] == True
+                    dp[row][col] = True
                     if col - row > right - left:
                         right = col
                         left = row
-        
+        print(dp)
         return s[left:right + 1]
 
