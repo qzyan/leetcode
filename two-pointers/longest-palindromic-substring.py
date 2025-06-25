@@ -1,9 +1,9 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
         if not s:
-            return True
+            return s
         if len(s) == 1:
-            return True
+            return s
         
         dp = [[False] * len(s) for _ in range(len(s))]
         for i in range(len(s)):
