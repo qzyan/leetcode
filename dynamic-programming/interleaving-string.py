@@ -9,13 +9,16 @@ class Solution:
             return False
         
         dp = [[False] * (len(s2) + 1) for _ in range(2)]
-        dp[0][0] = True
         for row in range(len(s1) + 1):
+            if row > 0:
+                for col in range(len(s2) + 1):
+                    dp[row % 2][col] = False
+
             for col in range(len(s2) + 1):
                 if row == 0 and col == 0:
                     dp[0][0] = True
                     continue
-
+                
                 prev_state1 = dp[(row - 1) % 2][col] if row - 1 >= 0 else False
                 prev_state2 = dp[row % 2][col - 1] if col - 1 >= 0 else False
                 if not prev_state1 and not prev_state2:
@@ -26,6 +29,8 @@ class Solution:
                 
                 if prev_state2 and s2[col - 1] == s3[row + col - 1]:
                     dp[row % 2][col] = True
+                
+                print(dp)
                 
         return dp[len(s1) % 2][len(s2)]
 
