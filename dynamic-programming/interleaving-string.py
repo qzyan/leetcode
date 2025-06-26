@@ -29,8 +29,6 @@ class Solution:
                 
                 if prev_state2 and s2[col - 1] == s3[row + col - 1]:
                     dp[row % 2][col] = True
-                
-                print(dp)
-                
+                                
         return dp[len(s1) % 2][len(s2)]
 
