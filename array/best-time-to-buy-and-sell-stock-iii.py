@@ -1,12 +1,20 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        buy1, sell1, buy2, sell2 = -prices[0], 0, -prices[0], 0
-        for i in range(1, len(prices)):
-            price = prices[i]
-            buy1 = max(buy1, -price)
-            sell1 = max(sell1, buy1 + price)
-            buy2 = max(buy2, sell1 - price)
-            sell2= max(sell2, buy2 + price)
-            print(buy1, sell1, buy2, sell2)
+        if not prices:
+            return 0
 
-        return sell2
+        dp1 = [0] * len(prices) # max_profit after 1st trans
+        dp2 = [0] * len(prices) # max_profit after 2nd trans
+
+        curr_min = prices[0]
+        max_left_afer_2nd_buy = -float("inf")
+        for idx, price in enumerate(prices):
+            dp1[idx] = max(dp1[idx - 1], price - curr_min)
+            if price < curr_min:
+                curr_min = price
+            
+            max_left_afer_2nd_buy = max(max_left_afer_2nd_buy, dp1[idx] - price)
+
+            dp2[idx] = max(dp2[idx - 1], max_left_afer_2nd_buy + price)
+
+        return dp2[-1]
