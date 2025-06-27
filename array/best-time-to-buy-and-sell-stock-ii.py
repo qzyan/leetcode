@@ -7,7 +7,7 @@ class Solution:
         hold = -prices[0]
         for i in range(len(prices)):
             price = prices[i]
-            nohold = max(nohold, hold + price)
             hold = max(hold, nohold - price)
+            nohold = max(nohold, hold + price)
 
         return max(hold, nohold)
