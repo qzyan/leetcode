@@ -1,14 +1,15 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        max_after_1st_buy = -float("inf")
-        max_after_1st_sell = 0
-        max_after_2nd_buy = -float("inf")
-        max_after_2nd_sell = 0
+        dp1 = [0] * len(prices) # util idx day, with n     trade, max profit can get
+        dp2 = [0] * len(prices) # util idx day, with n + 1 trade, max profit can get
+        
+        for _ in range(2):
+            max_after_buy = -float("inf")
+            for idx, price in enumerate(prices):
+                max_after_buy = max(max_after_buy, dp1[idx] - price)
+                dp2[idx] = max(dp2[idx - 1], max_after_buy + price) if idx - 1 >= 0 else 0
 
-        for price in prices:
-            max_after_1st_buy = max(max_after_1st_buy, -price)
-            max_after_1st_sell = max(max_after_1st_sell, max_after_1st_buy + price)
-            max_after_2nd_buy = max(max_after_2nd_buy, max_after_1st_sell - price)
-            max_after_2nd_sell = max(max_after_2nd_sell, max_after_2nd_buy + price)
+            dp1 = dp2
+            dp2 = [0] * len(prices)
 
-        return max_after_2nd_sell
+        return dp1[-1]
