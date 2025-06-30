@@ -6,9 +6,6 @@ class Solution:
             if dp[idx] == float("inf"):
                 continue
             
-            if nums[idx] + idx >= len(nums):
-                break 
-            
             for step in range(1, nums[idx] + 1):
                 if step + idx  == len(nums) - 1:
                     return dp[idx] + 1
