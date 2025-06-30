@@ -1,37 +1,20 @@
 class Solution:
     def hIndex(self, citations: List[int]) -> int:
         citations = sorted(citations)
+        #[0, 1, 4, 5, 6] -> 3
+
         left = 0
-        right = citations[-1]
-        while left + 1 < right:
-            mid = (left + right ) // 2
-            if self.count_of_paper_with_c_le(citations, mid) >= mid:
-                left = mid
-            else:
-                right = mid
-
-        
-        if self.count_of_paper_with_c_le(citations, right) >= right:
-            return right
-
-        return left
-
-    def count_of_paper_with_c_le(self, citations, target):
-        left = 0
-        right = len(citations) - 1
+        right = len(citations)
         while left + 1 < right:
             mid = (left + right) // 2
-            if citations[mid] >= target:
-                right = mid
-            else:
+            idx = len(citations) - mid
+            if citations[idx] >= mid:
                 left = mid
+            else:
+                right = mid
 
-        if citations[left] >= target:
-            return len(citations) - left
-        if citations[right] >= target:
-            return len(citations) - right
-
-        return 0
-
-
-         
+        idx = len(citations) - right
+        if citations[idx] >= right:
+            return right
+        
+        return left
