@@ -1,15 +1,16 @@
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        dp = [float("inf")] * len(nums)
-        dp[0] = 0
-        for idx in range(len(nums)):
-            if dp[idx] == float("inf"):
-                continue
+        curr_idx = 0
+        furthest_idx = 0
+        step = 0
+        while furthest_idx < len(nums) - 1:
+            new_furthest_idx = furthest_idx
             
-            for step in range(1, nums[idx] + 1):
-                if step + idx  == len(nums) - 1:
-                    return dp[idx] + 1
-                if step + idx < len(nums):
-                    dp[step + idx] = min(dp[step + idx], dp[idx] + 1)
-
-        return dp[-1]
+            while curr_idx <= furthest_idx:
+                new_furthest_idx = max(new_furthest_idx, curr_idx + nums[curr_idx])
+                curr_idx += 1
+            
+            step += 1
+            furthest_idx = new_furthest_idx
+        
+        return step
