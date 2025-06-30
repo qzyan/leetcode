@@ -9,7 +9,7 @@ class Solution:
             for step in range(1, nums[idx] + 1):
                 if step + idx  == len(nums) - 1:
                     return dp[idx] + 1
-                
-                dp[step + idx] = min(dp[step + idx], dp[idx] + 1)
+                if step + idx < len(nums):
+                    dp[step + idx] = min(dp[step + idx], dp[idx] + 1)
 
         return dp[-1]
