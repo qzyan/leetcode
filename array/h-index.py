@@ -4,17 +4,15 @@ class Solution:
         #[0, 1, 4, 5, 6] -> 3
 
         left = 0
-        right = len(citations)
+        right = citations[-1]
         while left + 1 < right:
             mid = (left + right) // 2
-            idx = len(citations) - mid
-            if citations[idx] >= mid:
+            if citations[len(citations) - mid] >= mid:
                 left = mid
             else:
                 right = mid
 
-        idx = len(citations) - right
-        if citations[idx] >= right:
+        if citations[len(citations) - right] >= right:
             return right
-        
+
         return left
