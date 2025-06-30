@@ -7,12 +7,15 @@ class Solution:
         right = citations[-1]
         while left + 1 < right:
             mid = (left + right) // 2
-            if citations[len(citations) - mid] >= mid:
+            if len(citations) - mid < 0:
+                right = mid
+            elif citations[len(citations) - mid] >= mid:
                 left = mid
             else:
                 right = mid
 
-        if citations[len(citations) - right] >= right:
+
+        if len(citations) - right >= 0 and citations[len(citations) - right] >= right:
             return right
 
         return left
