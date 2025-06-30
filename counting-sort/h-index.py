@@ -1,23 +1,13 @@
 class Solution:
     def hIndex(self, citations: List[int]) -> int:
-        citations = sorted(citations)
-        #[0, 1, 4, 5, 6] -> 3
+        counts = [0] * 1001
+        for citation in citations:
+            counts[citation] += 1
 
-        left = 0
-        right = citations[-1]
-        if right == 0:
-            return 0
-        while left + 1 < right:
-            mid = (left + right) // 2
-            if len(citations) - mid < 0:
-                right = mid
-            elif citations[len(citations) - mid] >= mid:
-                left = mid
-            else:
-                right = mid
+        count = 0
+        for idx in range(len(counts) - 1, -1, -1):
+            count += counts[idx]
+            if count >= idx:
+                return idx
 
-
-        if len(citations) - right >= 0 and citations[len(citations) - right] >= right:
-            return right
-
-        return left
+        return 0
