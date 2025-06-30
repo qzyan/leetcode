@@ -1,18 +1,21 @@
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        curr_idx = 0
-        curr_furthest_idx = 0
-        next_furthest_idx = 0
+        queue = collections.deque([0])
+        furthest_idx = 0
         step = 0
-        while curr_idx < len(nums):
-            if curr_furthest_idx >= len(nums) - 1:
+
+        while queue:
+            end_idx = furthest_idx
+            for _ in range(len(queue)):
+                curr_idx = queue.popleft()
+                furthest_idx = max(furthest_idx, curr_idx + nums[curr_idx])
+
+            step += 1
+            if furthest_idx >= len(nums) - 1:
                 break
 
-            next_furthest_idx = max(next_furthest_idx, nums[curr_idx] + curr_idx)
-            if curr_idx == curr_furthest_idx:
-                step += 1
-                curr_furthest_idx = next_furthest_idx
-
-            curr_idx += 1
+            for idx in range(end_idx, furthest_idx + 1):
+                queue.append(idx)
 
         return step
+
