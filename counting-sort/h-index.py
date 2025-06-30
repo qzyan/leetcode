@@ -5,6 +5,8 @@ class Solution:
 
         left = 0
         right = citations[-1]
+        if right == 0:
+            return 0
         while left + 1 < right:
             mid = (left + right) // 2
             if len(citations) - mid < 0:
