@@ -1,13 +1,23 @@
 class Solution:
     def hIndex(self, citations: List[int]) -> int:
-        counts = [0] * 1001
-        for citation in citations:
-            counts[citation] += 1
+        right = min(len(citations), max(citations))
+        left = 0
+        while left + 1 < right:
+            mid = (left + right) // 2
+            if self.exist_k_papers_cited_ge_k(citations, mid):
+                left = mid
+            else:
+                right = mid
 
+        if self.exist_k_papers_cited_ge_k(citations, right):
+            return right
+
+        return left
+
+    def exist_k_papers_cited_ge_k(self, citations, k):
         count = 0
-        for idx in range(len(counts) - 1, -1, -1):
-            count += counts[idx]
-            if count >= idx:
-                return idx
-
-        return 0
+        for c in citations:
+            if c >= k:
+                count += 1
+        
+        return count >= k
