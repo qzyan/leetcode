@@ -1,22 +1,18 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        if not height:
-            return 0
-
-        left = 0
-        right = len(height) - 1
-        left_max = height[0]
-        right_max = height[-1]
+        stack = []
         water = 0
-        while left < right:
-            left_max = max(left_max, height[left])
-            right_max = max(right_max, height[right])
-            if left_max < right_max:
-                water += left_max - height[left]
-                left += 1
-            else:
-                water += right_max - height[right]
-                right -= 1
+        for idx in range(len(height)):
+            curr_h = height[idx]
+            while stack and height[stack[-1]] <= curr_h:
+                min_h = height[stack.pop()]
+                if not stack:
+                    continue
+
+                bound_h = min(curr_h, height[stack[-1]])
+                water += (bound_h - min_h) * (idx - stack[-1] - 1)
+            
+            stack.append(idx)
 
         return water
 
