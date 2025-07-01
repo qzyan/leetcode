@@ -11,6 +11,7 @@ class Solution:
         self.add_all_boarders(heightMap, heap_queue, visited)
         water = 0
         water_level = 0
+        print(heap_queue)
         while heap_queue:
             curr_grid_height, curr_row, curr_col = heapq.heappop(heap_queue)
             if curr_grid_height > water_level:
@@ -33,7 +34,7 @@ class Solution:
             heapq.heappush(heap_queue, (heightMap[row][0], row, 0))
             visited.add((row, 0))
 
-            heapq.heappush(heap_queue, (heightMap[row][len(heightMap[0]) - 1], row, 0))
+            heapq.heappush(heap_queue, (heightMap[row][len(heightMap[0]) - 1], row, len(heightMap[0]) - 1))
             visited.add((row, len(heightMap[0]) - 1))
 
         for col in range(1, len(heightMap[0]) - 1):
