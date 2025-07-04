@@ -6,6 +6,9 @@ class Solution:
         return self.dfs(0, graph, coins, k, 0, visited, memo)
 
     def dfs(self, curr_node, graph, coins, k, op2_count, visited, memo):
+        if op2_count >= 14:
+            return 0
+
         if (curr_node, op2_count) in memo:
             return memo[(curr_node, op2_count)]
         op1 = (coins[curr_node] >> op2_count) - k
