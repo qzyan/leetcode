@@ -3,16 +3,12 @@ class Solution:
         if not nums:
             return 0
 
-        dp = [[1] * len(nums) for _ in range(k + 1)]
-        for i in range(k + 1):
-            for j in range(len(nums)):
-                for p in range(j):
-                    if nums[j] == nums[p]:
-                        dp[i][j] = max(dp[i][j], dp[i][p] + 1)
-                    else:
-                        if i - 1 >= 0:
-                            dp[i][j] = max(dp[i][j], dp[i - 1][p] + 1)
-                        else:
-                            dp[i][j] = max(dp[i][j], 1)
+        dp = [{} for _ in range(k + 1)]
+        res = [0] * (k + 1)
 
-        return max(dp[k]) 
+        for num in nums:
+            for i in range(k, -1, -1):
+                dp[i][num] = max(dp[i][num] + 1 if num in dp[i] else 1, res[i - 1] + 1 if i else 0)
+                res[i] = max(res[i], dp[i][num])
+
+        return res[k]
