@@ -8,7 +8,7 @@ class Solution:
             for i in range(k + 1):
                 dp[i][num] = dp[i].get(num, 0) + 1
                 dp[i][num] = max(dp[i][num], (prev_res[i - 1] + 1 if i else 1))
-                res[i] = max(res[i], dp[i][num])
+                res[i] = max(prev_res[i], dp[i][num])
             
             prev_res = res
             res = [0] * (k + 1)
