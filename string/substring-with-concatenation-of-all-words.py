@@ -18,7 +18,7 @@ class Solution:
         right = start_idx + word_len
         words_freq_of_s_mapping = {}
         results = []
-        while right < len(s):
+        while right <= len(s):
             word = s[right - word_len:right]
             if word not in words_freq_mapping:
                 left = right
