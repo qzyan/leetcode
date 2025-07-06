@@ -15,7 +15,7 @@ class Codec:
         """
         vals = []
         self.serialize_helper(root, vals)
-        return "".join(vals)
+        return ",".join(vals)
 
     def serialize_helper(self, root, vals):
         if not root:
@@ -36,6 +36,7 @@ class Codec:
         if not data:
             return None
 
+        data = data.split(",")
         recorder = {"curr_idx": 0}
         return self.deserialize_helper(data, recorder)
 
