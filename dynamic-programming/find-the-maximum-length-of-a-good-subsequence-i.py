@@ -1,17 +1,18 @@
 class Solution:
     def maximumLength(self, nums: List[int], k: int) -> int:
-        dp1 = [{} for _ in range(k + 1)]
-        dp2 = [[0] * len(nums) for _ in range(k + 1)]
-
-        for col in range(len(nums)):
-            num = nums[col]
-            dp1[0][num] = dp1[0].get(num, 0) + 1
-            dp2[0][col] = max(dp2[0][col - 1], dp1[0][num]) if col - 1 >= 0 else dp1[0][num]
-
-        for row in range(1, k + 1):
+        dp = [[1] * len(nums) for _ in range(k + 1)]
+        res = 1
+        for row in range(k + 1):
+            dp[row][0] = 1
             for col in range(1, len(nums)):
-                num = nums[col]
-                dp1[row][num] = max(dp1[row].get(num, 0) + 1, dp2[row - 1][col - 1] + 1)
-                dp2[row][col] = max(dp2[row][col - 1], dp1[row][num]) if col - 1 >= 0 else dp1[row][num]
+                for j in range(col):
+                    if nums[col] == nums[j]:
+                        dp[row][col] = max(dp[row][j] + 1, dp[row][col])
+                    else:
+                        dp[row][col] = max(dp[row - 1][j] + 1 if row else 1, dp[row][col])
 
-        return max([dp2[row][-1] for row in range(k + 1)])
+                    res = max(res, dp[row][col])
+
+        return res
+
+            
