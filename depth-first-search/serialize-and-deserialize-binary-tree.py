@@ -13,18 +13,24 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
-        vals = []
-        self.serialize_helper(root, vals)
-        return ",".join(vals)
-
-    def serialize_helper(self, root, vals):
         if not root:
-            vals.append("N")
-            return
+            return ""
 
-        vals.append(str(root.val))
-        self.serialize_helper(root.left, vals)
-        self.serialize_helper(root.right, vals)
+        vals = []
+        queue = collections.deque([root])
+        while queue:
+            for _ in range(len(queue)):
+                curr_node = queue.popleft()
+                if curr_node is None:
+                    vals.append("N")
+                else:
+                    vals.append(str(curr_node.val))
+                    queue.append(curr_node.left)
+                    queue.append(curr_node.right)
+
+        return " ".join(vals)
+
+
         
 
     def deserialize(self, data):
@@ -35,23 +41,30 @@ class Codec:
         """
         if not data:
             return None
-
-        data = data.split(",")
-        recorder = {"curr_idx": 0}
-        return self.deserialize_helper(data, recorder)
-
-    def deserialize_helper(self, data, recorder):
-        curr_idx = recorder["curr_idx"]
-        val_str = data[curr_idx]
-        recorder["curr_idx"] += 1
-        if val_str == "N":
-            return None
         
-        root = TreeNode(int(val_str))
-        root.left = self.deserialize_helper(data, recorder)
-        root.right = self.deserialize_helper(data, recorder)
+        data = data.split(" ")
+        root = TreeNode(int(data[0]))
+        idx = 1
+        queue = collections.deque([root])
+        while queue:
+            curr_node = queue.popleft()
+
+            val_str1 = data[idx]
+            val_str2 = data[idx + 1]
+            idx += 2
+            node1 = None if val_str1 == "N" else TreeNode(int(val_str1))
+            node2 = None if val_str2 == "N" else TreeNode(int(val_str2))
+
+            curr_node.left = node1
+            curr_node.right = node2
+            if node1:
+                queue.append(node1)
+            if node2:
+                queue.append(node2)
 
         return root
+
+        
         
 
 # Your Codec object will be instantiated and called as such:
