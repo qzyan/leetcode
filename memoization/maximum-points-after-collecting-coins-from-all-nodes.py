@@ -8,7 +8,7 @@ class Solution:
 
     def dfs(self, graph, coins, root, reduced_times, visited, k, memo):
         if memo[root][reduced_times] is not None:
-            return reduced_times
+            return memo[root][reduced_times]
         if reduced_times > 14:
             return 0
 
