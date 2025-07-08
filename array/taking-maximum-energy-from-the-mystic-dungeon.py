@@ -1,9 +1,10 @@
 class Solution:
     def maximumEnergy(self, energy: List[int], k: int) -> int:
-        dp = [e for e in energy]
+        dp = [0] * len(energy)
+        result = -float("inf")
+        for idx in range(len(energy) - 1, -1 ,- 1):
+            dp[idx] = energy[idx] + (dp[idx + k] if idx + k < len(energy) else 0)
+            result = max(result, dp[idx])
 
-        for idx in range(len(dp)):
-            dp[idx] = max(dp[idx], dp[idx - k] + energy[idx] if idx >= k else energy[idx])
-
-        return max(dp[len(dp) - k:])
+        return result
 
