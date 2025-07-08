@@ -2,15 +2,16 @@ class Solution:
     def maximumPoints(self, edges: List[List[int]], coins: List[int], k: int) -> int:
         graph = self.build_graph(edges)
         visited = set([0])
-        memo = [[None] * 14 for _ in range(len(coins))]
+        memo = [[None] * 15 for _ in range(len(coins))]
         res = self.dfs(graph, coins, 0, 0, visited, k, memo)
         return res
 
     def dfs(self, graph, coins, root, reduced_times, visited, k, memo):
-        if memo[root][reduced_times] is not None:
-            return memo[root][reduced_times]
         if reduced_times > 14:
             return 0
+
+        if memo[root][reduced_times] is not None:
+            return memo[root][reduced_times]
 
         curr_coin = coins[root] >> reduced_times
 
