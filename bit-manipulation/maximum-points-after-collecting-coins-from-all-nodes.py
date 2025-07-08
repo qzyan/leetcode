@@ -2,46 +2,51 @@ class Solution:
     def maximumPoints(self, edges: List[List[int]], coins: List[int], k: int) -> int:
         graph = self.build_graph(edges)
         visited = set([0])
-        memo = {}
-        return self.dfs(0, graph, coins, k, 0, visited, memo)
+        memo = [[None] * 14 for _ in range(len(coins))]
+        res = self.dfs(graph, coins, 0, 0, visited, k, memo)
+        return res
 
-    def dfs(self, curr_node, graph, coins, k, op2_count, visited, memo):
-        if op2_count >= 14:
+    def dfs(self, graph, coins, root, reduced_times, visited, k, memo):
+        if memo[root][reduced_times] is not None:
+            return reduced_times
+        if reduced_times > 14:
             return 0
 
-        if (curr_node, op2_count) in memo:
-            return memo[(curr_node, op2_count)]
-        op1 = (coins[curr_node] >> op2_count) - k
-        for next_node in graph[curr_node]:
-            if next_node in visited:
+        curr_coin = coins[root] >> reduced_times
+
+        res1 = curr_coin - k
+        for neighbor in graph[root]:
+            if neighbor in visited:
                 continue
             
-            visited.add(next_node)
-            op1 += self.dfs(next_node, graph, coins, k, op2_count, visited, memo)
-            visited.remove(next_node)
-
-        if (coins[curr_node] >> op2_count) - k >= (coins[curr_node] >> (op2_count + 1)):
-            return op1
+            visited.add(neighbor)
+            sub_res1 = self.dfs(graph, coins, neighbor, reduced_times, visited, k, memo)
+            visited.remove(neighbor)
+            res1 += sub_res1
         
-        op2 = coins[curr_node] >> (op2_count + 1)
-        for next_node in graph[curr_node]:
-            if next_node in visited:
+        if curr_coin - k > curr_coin // 2:
+            memo[root][reduced_times] = res1
+            return res1
+        
+        res2 = curr_coin // 2
+        for neighbor in graph[root]:
+            if neighbor in visited:
                 continue
             
-            visited.add(next_node)
-            op2 += self.dfs(next_node, graph, coins, k, op2_count + 1, visited, memo)
-            visited.remove(next_node)
+            visited.add(neighbor)
+            sub_res2 = self.dfs(graph, coins, neighbor, reduced_times + 1, visited, k, memo)
+            visited.remove(neighbor)
+            res2 += sub_res2
 
-        memo[(curr_node, op2_count)] = max(op2, op1)
-        return memo[(curr_node, op2_count)]
-
-    def build_graph(self, edges):
+        memo[root][reduced_times] = max(res1, res2)
+        return max(res1, res2)
+    
+    def build_graph(sefl, edges):
         graph = {}
-        for p1, p2 in edges:
-            graph[p1] = graph.get(p1, set())
-            graph[p1].add(p2)
-            graph[p2] = graph.get(p2, set())
-            graph[p2].add(p1)
-
+        for n1, n2 in edges:
+            graph[n1] = graph.get(n1, set())
+            graph[n2] = graph.get(n2, set())
+            graph[n1].add(n2)
+            graph[n2].add(n1)
+        
         return graph
-
