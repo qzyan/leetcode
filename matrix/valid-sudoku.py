@@ -23,7 +23,7 @@ class Solution:
                     return False
                 
                 digits_in_rows[r_idx].add(digit)
-                digits_in_rows[c_idx].add(digit)
+                digits_in_cols[c_idx].add(digit)
                 digits_in_submatrixs[r_idx // 3 * 3 + c_idx // 3].add(digit)
 
         return True
