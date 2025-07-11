@@ -1,6 +1,6 @@
 class Solution:
     def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
-        if not nums:
+        if not nums or len(nums) == 1:
             return False
         if k == 0:
             return False
