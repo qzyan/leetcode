@@ -5,7 +5,7 @@ class Solution:
 
         nums_set = set(nums)
         res = 1
-        for num in nums:
+        for num in nums_set:
             if num - 1 in nums_set:
                 continue
             
