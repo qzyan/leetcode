@@ -31,7 +31,7 @@ class Solution:
                     heapq.heappush(buys_maxheap, (-buy_price, buy_qty - trade))
                 
                 if sell_qty - trade > 0:
-                    heapq.heappush(sells_minheap, (price, sell_qty - trade))
+                    heapq.heappush(sells_minheap, (sell_price, sell_qty - trade))
 
         
         res = 0
