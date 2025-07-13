@@ -15,34 +15,25 @@ class Solution:
         for order in orders:
             price, qty, order_type = order
             if order_type == OrderType.SELL:
-                while buys_maxheap and -buys_maxheap[0][0] >= price and qty:
-                    buy_price, buy_qty = heapq.heappop(buys_maxheap)
-                    buy_price = -buy_price
-                    if buy_qty == qty:
-                        qty = 0
-                    elif buy_qty > qty:
-                        heapq.heappush(buys_maxheap, (-buy_price, buy_qty - qty))
-                        qty = 0
-                    else:
-                        qty -= buy_qty
-            
-                if qty:
-                    heapq.heappush(sells_minheap, (price, qty))
+                heapq.heappush(sells_minheap, (price, qty))
 
-            elif order_type == OrderType.BUY:
-                while sells_minheap and sells_minheap[0][0] <= price and qty:
-                    sell_price, sell_qty = heapq.heappop(sells_minheap)
-                    if sell_qty == qty:
-                        qty = 0
-                    elif sell_qty > qty:
-                        heapq.heappush(sells_minheap, (sell_price, sell_qty - qty))
-                        qty = 0
-                    else:
-                        qty -= sell_qty
+            if order_type == OrderType.BUY:
+                heapq.heappush(buys_maxheap, (-price, qty))
 
-                if qty:
-                    heapq.heappush(buys_maxheap, (-price, qty))
+            while buys_maxheap and sells_minheap and -buys_maxheap[0][0] >= sells_minheap[0][0]:
+                buy_price, buy_qty = heapq.heappop(buys_maxheap)
+                buy_price = -buy_price
+                sell_price, sell_qty = heapq.heappop(sells_minheap)
 
+                trade = min(sell_qty, buy_qty)
+
+                if buy_qty - trade > 0:
+                    heapq.heappush(buys_maxheap, (-buy_price, buy_qty - trade))
+                
+                if sell_qty - trade > 0:
+                    heapq.heappush(sells_minheap, (price, sell_qty - trade))
+
+        
         res = 0
         for order in buys_maxheap:
             res += order[1] 
