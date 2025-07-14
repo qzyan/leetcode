@@ -4,7 +4,7 @@ class Solution:
             return 0
         
         if len(nums) <= 2:
-            return 2
+            return len(nums)
 
         dp = [1] * len(nums)
         is_pos = [False] * len(nums)
