@@ -4,21 +4,22 @@ class Solution:
             return 0
 
         dp = [nums[0]]
-        is_diff_pos = False
         for i in range(1, len(nums)):
             num = nums[i]
             if num == dp[-1]:
                 continue
-            
-            if num > dp[-1] and is_diff_pos:
+
+            if len(dp) == 1:
+                dp.append(num)
+            elif num > dp[-1] and dp[-1] > dp[-2]:
                 dp[-1] = num
-            elif num > dp[-1] and not is_diff_pos:
+            elif num > dp[-1] and dp[-1] < dp[-2]:
                 dp.append(num)
                 is_diff_pos = True
-            elif num < dp[-1] and is_diff_pos:
+            elif num < dp[-1] and dp[-1] > dp[-2]:
                 dp.append(num)
                 is_diff_pos = False
-            else:
+            elif num < dp[-1] and not dp[-1] < dp[-2]:
                 dp[-1] = num
 
         return len(dp)
