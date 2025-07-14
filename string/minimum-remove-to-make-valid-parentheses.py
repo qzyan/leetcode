@@ -17,13 +17,15 @@ class Solution:
 
 
         result = []
-        for char in stack:
+        for i in range(len(stack) - 1, -1, -1):
+            char = stack[i]
             if char == "(" and fp_count > bp_count:
                 fp_count -= 1
                 continue
             
             result.append(char)
 
+        result.reverse()
         return "".join(result)
             
 
