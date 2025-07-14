@@ -8,9 +8,10 @@ class Solution:
         graph = {i: {} for i in range(n)}
 
         for i in range(len(edges)):
-            from_node, to_node = edges[i]
+            node1, node2 = edges[i]
             prob = succProb[i]
-            graph[from_node][to_node] = prob
+            graph[node1][node2] = prob
+            graph[node2][node1] = prob
 
         return graph
 
