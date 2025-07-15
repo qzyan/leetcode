@@ -7,32 +7,33 @@ class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
         dummy = ListNode()
         dummy.next = head
-        l_prev_node = self.find_node(dummy, left - 1)
-        r_prev_node = self.find_node(dummy, right - 1)
-        l_node = l_prev_node.next
-        r_node = r_prev_node.next
-        r_next_node = r_node.next
-        r_node.next = None
+
+        idx = 0
+        node = dummy
+        while idx < left - 1:
+            node = node.next
+            idx += 1
+
+        l_prev_node = node
+
+        idx += 1
+        node = node.next
+        l_node = node
 
         prev_node = None
-        curr_node = l_node
-        while curr_node:
-            next_node = curr_node.next
-            curr_node.next = prev_node
-            prev_node = curr_node
-            curr_node = next_node
-        
-        l_prev_node.next = r_node
-        l_node.next = r_next_node
+        while idx <= right:
+            next_node = node.next
+            node.next = prev_node
+            prev_node = node
+            node = next_node
+            idx += 1
+
+        l_prev_node.next = prev_node
+        l_node.next = node
 
         return dummy.next
+        
 
-    def find_node(self, head, k):
-        while k > 0:
-            head = head.next
-            k -= 1
-
-        return head
 
 
 
