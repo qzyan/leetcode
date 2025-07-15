@@ -5,47 +5,46 @@
 #         self.next = next
 class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        if not head:
-            return None
-
         dummy = ListNode()
         dummy.next = head
 
+        curr_node = head
         prev_tail = dummy
-        while prev_tail:
-            last_node, next_head = self.split(prev_tail, k)
-            if not last_node:
+        while curr_node:
+            last_node, next_head = self.split(curr_node, k)
+            if last_node is None:
                 break
             
-            self.reverse(head, last_node)
+            self.reverse(curr_node, last_node)
             prev_tail.next = last_node
-            head.next = next_head
-
-            prev_tail = head
-            head = next_head
+            curr_node.next = next_head
+            prev_tail = curr_node
+            curr_node = next_head
 
         return dummy.next
 
-    def split(self, prev_tail, k):
-        node = prev_tail
-        while k and node:
+    def split(self, node, k):
+        while node and k > 1:
             node = node.next
             k -= 1
 
         if node is None:
             return None, None
         
-        return node, node.next
+        next_head = node.next
+        node.next = None
+        return node, next_head
 
-    def reverse(self, head, last_node):
+    def reverse(self, left_node, right_node):
         prev_node = None
-        curr_node = head
-        while prev_node != last_node:
-            next_node = curr_node.next
-            curr_node.next = prev_node
-            prev_node = curr_node
-            curr_node = next_node
+        node = left_node
+        while node:
+            next_node = node.next
+            node.next = prev_node
+            prev_node = node
+            node = next_node
 
         
 
-        
+
+
