@@ -2,20 +2,19 @@ class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         task_max_heap = self.count_tasks(tasks) # [(-3, A), (-2, B)]
         heapq.heapify(task_max_heap)
-        seq = []
-        idx = 0
+        count = 0
         while task_max_heap:
             waiting_tasks = []
             for i in range(n + 1):
                 if not task_max_heap and waiting_tasks:
-                    seq.append("idle")
+                    count += 1
                     continue
                 
                 if task_max_heap:
                     task_count, task = heapq.heappop(task_max_heap)
                     task_count = -task_count
                     task_count -= 1
-                    seq.append(task)
+                    count += 1
 
                     if task_count > 0:
                         waiting_tasks.append((-task_count, task))
@@ -23,13 +22,7 @@ class Solution:
             for task in waiting_tasks:
                 heapq.heappush(task_max_heap, task)
 
-        return len(seq)
-
-                 
-            
-            
-
-        return len(seq)
+        return count
 
     def count_tasks(self, tasks):
         mapping = {}
