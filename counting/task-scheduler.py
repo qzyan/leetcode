@@ -2,11 +2,10 @@ class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         task_count_mapping = self.count_task(tasks)
         task_counts = []
+        max_count = 0
         for task, count in task_count_mapping.items():
             task_counts.append((task, count))
-        
-        task_counts.sort(key=lambda x: (x[1], x[0]))
-        max_count = task_counts[-1][1]
+            max_count = max(max_count, count)
 
         idle_count = (max_count - 1) * (n + 1)
         for task, count in task_counts:
