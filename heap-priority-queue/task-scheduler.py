@@ -6,7 +6,7 @@ class Solution:
             task_counts.append((task, count))
         
         task_counts.sort(key=lambda x: (x[1], x[0]))
-        max_count = task_counts[0][1]
+        max_count = task_counts[-1][1]
 
         idle_count = (max_count - 1) * (n + 1)
         for task, count in task_counts:
