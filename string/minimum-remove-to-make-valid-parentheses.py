@@ -1,18 +1,26 @@
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        stack = []
-        chars = list(s)
-        for i, char in enumerate(chars):
-            if char == "(":
-                stack.append(i)
-            
-            if char == ")":
-                if stack:
-                    stack.pop()
+        if not s:
+            return ""
+
+        unmatched_opens = []
+        unmatched_closes = []
+        for idx in range(len(s)):
+            a = s[idx]
+            if a == "(":
+                unmatched_opens.append(idx)
+            elif a == ")":
+                if unmatched_opens:
+                    unmatched_opens.pop()
                 else:
-                    chars[i] = ""
+                    unmatched_closes.append(idx)
+        
+        results = [c for c in s]
+        for idx in unmatched_opens:
+            results[idx] = ""
+        
+        for idx in unmatched_closes:
+            results[idx] = ""
 
-        for idx in stack:
-            chars[idx] = ""
-
-        return "".join(chars)
+        return "".join(results)
+            
