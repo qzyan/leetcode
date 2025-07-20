@@ -15,7 +15,7 @@ class Solution:
             idx_remove = i - k
             if not small_max_heap or nums[i] <= -small_max_heap[0][0]:
                 heapq.heappush(small_max_heap, (-nums[i], i))
-                if large_min_heap and nums[idx_remove] > -small_max_heap[0][0]:
+                if large_min_heap and nums[idx_remove] >= large_min_heap[0][0]:
                     self.move(small_max_heap, large_min_heap)
             else:
                 heapq.heappush(large_min_heap, (nums[i], i))
