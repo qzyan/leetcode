@@ -1,33 +1,36 @@
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
-        if len(p) > len(s):
+        if len(s) < len(p):
             return []
+        
+        p_count = [0] * 26
+        for char in p:
+            idx = ord(char) - ord("a")
+            p_count[idx] += 1
 
-        p_code = self.encode(p)
+        s_count = [0] * 26
+        
+        for idx in range(len(p)):
+            char = s[idx]
+            s_count[ord(char) - ord("a")] += 1
 
-        char_count = [0] * 26
-        for i in range(len(p)):
-            char = s[i]
-            char_count[ord(char) - ord("a")] += 1
-
+        p_code = tuple(p_count)
+        s_code = tuple(s_count)
         results = []
-        for start_idx in range(len(s) - len(p) + 1):
-            s_code = tuple(char_count)
-            if s_code == p_code:
-                results.append(start_idx)
+        if p_code == s_code:
+            results.append(0)
 
-            if start_idx == len(s) - len(p):
-                break
+        for idx in range(len(p), len(s)):
+            char_add = s[idx]
+            char_remove = s[idx - len(p)]
+            s_count[ord(char_add) - ord("a")] += 1
+            s_count[ord(char_remove) - ord("a")] -= 1
 
-            char_count[ord(s[start_idx]) - ord("a")] -= 1
-            char_count[ord(s[start_idx + len(p)]) - ord("a")] += 1
-            start_idx += 1
+            s_code = tuple(s_count)
+            if p_code == s_code:
+                results.append(idx - len(p) + 1)
 
         return results
 
-    def encode(self, p):
-        char_count = [0] * 26
-        for char in p:
-            char_count[ord(char) - ord("a")] += 1
+        
 
-        return tuple(char_count)
