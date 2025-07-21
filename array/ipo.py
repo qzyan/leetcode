@@ -10,6 +10,9 @@ class Solution:
                 heapq.heappush(max_profits, -profit)
             if max_profits:
                 w -= heapq.heappop(max_profits)
+            else:
+                return w
+
             k -= 1
         
         return w
