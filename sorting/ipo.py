@@ -1,10 +1,11 @@
 class Solution:
     def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
         max_profits = []
-        capital = capital[:]
+        capital = [(cap, idx) for idx, cap in enumerate(capital)]
+        heapq.heapify(capital)
         while k > 0:
-            idxs = self.find_available_projects(capital, w)
-            for idx in idxs:
+            while capital and capital[0][0] <= w:
+                cap, idx = heapq.heappop(capital)
                 profit = profits[idx]
                 heapq.heappush(max_profits, -profit)
             if max_profits:
@@ -12,13 +13,3 @@ class Solution:
             k -= 1
         
         return w
-
-    def find_available_projects(self, capital, w):
-        idxs = []
-        for idx, c in enumerate(capital):
-            if c <= w:
-                idxs.append(idx)
-                # mark it done
-                capital[idx] = float("inf")
-
-        return idxs
