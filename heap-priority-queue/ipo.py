@@ -7,8 +7,8 @@ class Solution:
             for idx in idxs:
                 profit = profits[idx]
                 heapq.heappush(max_profits, -profit)
-
-            w -= heapq.heappop(max_profits)
+            if max_profits:
+                w -= heapq.heappop(max_profits)
             k -= 1
         
         return w
