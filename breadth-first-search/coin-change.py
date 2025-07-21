@@ -1,11 +1,25 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        coin_set = set(coins)
-        dp = [float("inf")] * (amount + 1)
-        dp[0] = 0
-        for i in range(1, amount + 1):
-            for coin in coin_set:
-                if i - coin >= 0 and dp[i - coin] != float("inf"):
-                    dp[i] = min(dp[i], dp[i - coin] + 1)
+        if amount == 0:
+            return 0
+        coins = sorted(coins)
+        memo = {}
+        return self.helper(coins, amount, memo)
 
-        return dp[amount] if dp[amount]!= float("inf") else -1
+    def helper(self, coins, amount, memo):
+        if amount == 0:
+            return 0
+
+        if amount in memo:
+            return memo[amount]
+        min_subres = float("inf")
+        for coin in coins:
+            if coin > amount:
+                break
+            sub_res = self.helper(coins, amount - coin, memo)
+            if sub_res != -1:
+                min_subres = min(min_subres, sub_res)
+        
+        res = -1 if min_subres == float("inf") else min_subres + 1
+        memo[amount] = res
+        return res
