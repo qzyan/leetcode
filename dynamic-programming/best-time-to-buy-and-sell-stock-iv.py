@@ -1,14 +1,14 @@
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:
-        dp1 = [0] * len(prices)
-        for _ in range(1, k + 1):
-            dp2 = [0] * len(prices)
-            max_after_buy = -float("inf")
-            for idx, price in enumerate(prices):
-                max_after_buy = max(max_after_buy, dp1[idx] - price)
-                dp2[idx] = max(dp2[idx - 1], max_after_buy + price)
+        if not prices:
+            return 0
 
-            dp1 = dp2
-
-        return dp1[-1]
-
+        buys = [-prices[0]] * (k + 1)
+        sells = [0] * (k + 1)
+        for idx in range(1, len(prices)):
+            price = prices[idx]
+            for j in range(1, k + 1):
+                buys[j] = max(buys[j], sells[j - 1] - price)
+                sells[j] = max(sells[j], buys[j] + price)
+        
+        return sells[-1]
