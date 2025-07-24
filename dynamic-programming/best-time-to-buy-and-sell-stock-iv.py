@@ -4,6 +4,7 @@ class Solution:
             return 0
 
         buys = [-prices[0]] * (k + 1)
+        buys[0] = 0
         sells = [0] * (k + 1)
         for idx in range(1, len(prices)):
             price = prices[idx]
