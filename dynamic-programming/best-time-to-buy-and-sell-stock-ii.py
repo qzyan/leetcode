@@ -1,13 +1,10 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        if not prices:
-            return 0
+        max_after_buy = -float("inf")
+        max_after_sell = 0
 
-        hold = -prices[0]
-        nohold = 0
+        for price in prices:
+            max_after_buy = max(max_after_sell - price, max_after_buy)
+            max_after_sell = max(max_after_buy + price, max_after_sell)
 
-        for i in range(1, len(prices)):
-            hold = max(hold, nohold - prices[i])
-            nohold = max(nohold, hold + prices[i])
-
-        return nohold
+        return max_after_sell
