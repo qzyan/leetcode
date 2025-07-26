@@ -1,30 +1,21 @@
 class Solution:
     def shortestSubarray(self, nums: List[int], k: int) -> int:
-        if not nums:
-            return -1
-
-        left = 0
-        right = 0
+        prefix_sums = [0] * (len(nums) + 1)
         sum_val = 0
+        for idx, num in enumerate(nums):
+            sum_val += num
+            prefix_sums[idx + 1] = sum_val
+
+        queue = deque() # mono queue, [1,3,5, 10] prefix[idx] inc
         length = float("inf")
-        while right < len(nums):
-            sum_val += nums[right]
-            right += 1
+        for idx in range(len(prefix_sums)):
+            prefix_sum = prefix_sums[idx]
+            while queue and prefix_sums[queue[-1]] >= prefix_sum:
+                queue.pop()
 
-            while left < right:
-                if nums[left] > 0 and sum_val < k:
-                    break
-        
-                if nums[left] <= 0:
-                    sum_val -= nums[left]
-                    left += 1
-                elif sum_val >= k:
-                    if right - left < length:
-                        length = right - left
-
-                    sum_val -= nums[left]
-                    left += 1
+            queue.append(idx)
+            while queue and prefix_sum - prefix_sums[queue[0]] >= k:
+                length = min(length, idx - queue.popleft())
 
         return length if length != float("inf") else -1
-
-            
+        
