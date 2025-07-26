@@ -11,12 +11,19 @@ class Solution:
             sum_val += nums[right]
             right += 1
 
-            while left < right and sum_val >= k:
-                if right - left < length:
-                    length = right - left
-                
-                sum_val -= nums[left]
-                left += 1
+            while left < right:
+                if nums[left] > 0 and sum_val < k:
+                    break
+        
+                if nums[left] <= 0:
+                    sum_val -= nums[left]
+                    left += 1
+                elif sum_val >= k:
+                    if right - left < length:
+                        length = right - left
+
+                    sum_val -= nums[left]
+                    left += 1
 
         return length if length != float("inf") else -1
 
