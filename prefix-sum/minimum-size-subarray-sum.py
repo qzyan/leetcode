@@ -4,19 +4,15 @@ class Solution:
             return 0
 
         left, right = 0, 0
-        subarr_sum = 0
-        length = float("inf")
-
+        sum_val = 0
+        min_len = float("inf")
         while right < len(nums):
-            subarr_sum += nums[right]
+            sum_val += nums[right]
             right += 1
 
-            while left < right and subarr_sum >= target:
-                curr_len = right - left
-                if curr_len < length:
-                    length = curr_len
-                
-                subarr_sum -= nums[left]
+            while left < right and sum_val >= target:
+                min_len = min(min_len, right - left)
+                sum_val -= nums[left]
                 left += 1
-
-        return length if length != float("inf") else 0
+            
+        return min_len if min_len != float("inf") else 0
