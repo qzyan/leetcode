@@ -2,7 +2,38 @@ class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         graph = self.build_graph(numCourses, prerequisites)
         indegrees = self.get_indegrees(numCourses, graph)
+        results = []
+        self.dfs([], set(), results, graph, indegrees, numCourses)
+        return results[0] if len(results) > 0 else []
+        # bfs
+        # return self.bfs(graph, indegrees, numCourses)
 
+    def dfs(self, path, takens, results, graph, indegrees, numCourses):
+        if len(path) == numCourses:
+            results.append(path[:])
+            return
+
+        for course, indegree in indegrees.items():
+            if course in takens:
+                continue
+
+            if indegree == 0:
+                takens.add(course)
+                path.append(course)
+                for next_c in graph[course]:
+                    indegrees[next_c] -= 1
+
+                self.dfs(path, takens, results, graph, indegrees, numCourses)
+
+                takens.remove(course)
+                path.pop()
+                for next_c in graph[course]:
+                    indegrees[next_c] += 1
+
+        return
+
+
+    def bfs(self, graph, indegrees, numCourses):
         queue = collections.deque()
         for course, indegree in indegrees.items():
             if indegree == 0:
