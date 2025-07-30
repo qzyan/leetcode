@@ -3,18 +3,25 @@ class Solution:
         if not s:
             return 0
 
-        stack = []
-        remove_count = 0
-        for char in s:
+        unmatched_idxs = []
+        for idx in range(len(s)):
+            char = s[idx]
             if char == "(":
-                stack.append(char)
+                unmatched_idxs.append(idx)
                 continue
             
-            # this ")" unmatched, should be removed
-            if not stack:
-                remove_count += 1
+            # char == ")"
+            if unmatched_idxs and s[unmatched_idxs[-1]] == "(":
+                unmatched_idxs.pop()
             else:
-                stack.pop()
+                unmatched_idxs.append(idx)
 
-        remove_count += len(stack)
-        return len(s) - remove_count
+        prev_idx = -1
+        longest_len = 0
+        for idx in unmatched_idxs:
+            longest_len = max(longest_len, idx - prev_idx - 1)
+            prev_idx = idx
+
+        longest_len = max(len(s) - prev_idx - 1, longest_len)
+
+        return longest_len
