@@ -3,7 +3,9 @@ class Solution:
         if not s:
             return 0
 
-        stack = [-1]
+        # collect the unmatched idxs
+        # can only be ))))(((
+        stack = []
         max_len = 0
         for idx in range(len(s)):
             char = s[idx]
@@ -11,12 +13,14 @@ class Solution:
                 stack.append(idx)
                 continue
 
-            if stack:
-                start_idx = stack.pop()
-        
-            if not stack:
+            # char == ")"
+            # there is ( to match
+            if stack and s[stack[-1]] == "(":
+                stack.pop()
+                prev_idx = stack[-1] if stack else -1
+                max_len = max(max_len, idx - prev_idx)
+            # no "(" to match
+            else:
                 stack.append(idx)
-        
-            max_len = max(max_len, idx - stack[-1])
 
         return max_len
