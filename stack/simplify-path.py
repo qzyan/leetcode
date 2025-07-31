@@ -6,12 +6,13 @@ class Solution:
             if not folder:
                 continue
             
+            if folder not in [".", ".."]:
+                stack.append(folder)
+            
             if folder == ".":
                 continue
             
             if folder == ".." and stack:
                 stack.pop()
-            else:
-                stack.append(folder)
 
         return "/" + "/".join(stack)
