@@ -1,22 +1,32 @@
 class Solution:
     def longestValidParentheses(self, s: str) -> int:
-        stack = [-1]
-        max_len = 0
+        if not s:
+            return 0
+
+        # collect the unmatched idxs
+        # can only be ))))(((
+        stack = []
         for idx in range(len(s)):
             char = s[idx]
             if char == "(":
                 stack.append(idx)
                 continue
-            
+
             # char == ")"
-            if stack:
+            # there is ( to match
+            if stack and s[stack[-1]] == "(":
                 stack.pop()
-            if not stack:
+            # no "(" to match
+            else:
                 stack.append(idx)
-                continue
-            
-            max_len = max(max_len, idx - stack[-1])
+
+        prev_idx = -1
+        max_len = 0
+        for idx in stack:
+            max_len = max(max_len, idx - prev_idx - 1)
+            prev_idx = idx
+
+        max_len = max(max_len, len(s) - prev_idx - 1)
 
         return max_len
-
 
