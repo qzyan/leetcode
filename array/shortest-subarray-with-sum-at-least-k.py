@@ -2,18 +2,20 @@ class Solution:
     def shortestSubarray(self, nums: List[int], k: int) -> int:
         prefix_sums = [0]
         for num in nums:
-            curr_sum = num + prefix_sums[-1]
-            prefix_sums.append(curr_sum)
+            prefix_sums.append(prefix_sums[-1] + num)
+
+        # prefix_sums[j] - prefix_sum[i] = sum of nums[i:j]
+        min_len = float("inf")
 
         queue = collections.deque()
-        min_len = float("inf")
         for idx in range(len(prefix_sums)):
-            curr_prefix_sum = prefix_sums[idx]
-            while queue and prefix_sums[queue[-1]] >= curr_prefix_sum:
+            while queue and prefix_sums[idx] <= prefix_sums[queue[-1]]:
                 queue.pop()
 
-            queue.append(idx)
-            while queue and curr_prefix_sum - prefix_sums[queue[0]] >= k:
+            while queue and prefix_sums[idx] - prefix_sums[queue[0]] >= k:
                 min_len = min(min_len, idx - queue.popleft())
 
+            queue.append(idx)
+
         return min_len if min_len != float("inf") else -1
+            
