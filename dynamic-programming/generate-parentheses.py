@@ -6,20 +6,18 @@ class Solution:
 
         return paths
 
-    def dfs(self, path, paths, forward_count, backward_count, n):
-        if forward_count == n and backward_count == n:
+    def dfs(self, path, paths, open_count, close_count, n):
+        if len(path) == n * 2:
             paths.append("".join(path))
             return
 
-        if forward_count < n:
+        if open_count < n:
             path.append("(")
-            self.dfs(path, paths, forward_count + 1, backward_count, n)
+            self.dfs(path, paths, open_count + 1, close_count, n)
             path.pop()
 
-        if backward_count < forward_count:
+        if open_count > close_count:
             path.append(")")
-            self.dfs(path, paths, forward_count, backward_count + 1, n)
-            path.pop()
-
-        return
-
+            self.dfs(path, paths, open_count, close_count + 1, n)
+            path.pop()           
+        
