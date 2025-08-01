@@ -2,7 +2,7 @@ class Solution:
     def calculate(self, s: str) -> int:
         stack = []
         op = "+"
-        for idx in range(len(s)):
+        while idx <len(s):
             char = s[idx]
             if char == " ":
                 idx += 1
@@ -26,5 +26,6 @@ class Solution:
                     stack.append(int(prev_num / num))
             else:
                 op = char
+                idx += 1
 
         return sum(stack)
