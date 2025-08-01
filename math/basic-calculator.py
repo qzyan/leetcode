@@ -1,27 +1,27 @@
 class Solution:
     def calculate(self, s: str) -> int:
-        if not s:
-            return 0
-
-        idx, result = self.calc_helper(s, 0)
-        return result
-
-    def calc_helper(self, s, idx):
         result = 0
         op = "+"
+        idx = 0
+        results = []
+        ops = []
         while idx < len(s):
             char = s[idx]
             if char == " ":
                 idx += 1
                 continue
-
-            if char == ")":
-                idx += 1
-                break
-
+            
             if char == "(":
-                idx, sub_res = self.calc_helper(s, idx + 1)
-                result = self.calc(result, sub_res, op)
+                results.append(result)
+                ops.append(op)
+                result = 0
+                op = "+"
+                idx += 1
+            elif char == ")":
+                num1 = results.pop()
+                op = ops.pop()
+                result = (num1 + result) if op == "+" else (num1 + result)
+                idx += 1
             elif char in "+-":
                 op = char
                 idx += 1
@@ -30,14 +30,7 @@ class Solution:
                 while idx < len(s) and s[idx].isdigit():
                     num = num * 10 + int(s[idx])
                     idx += 1
+                
+                result = (result + num) if op == "+" else (result - num)
 
-                result = self.calc(result, num, op)
-
-        return idx, result
-
-    def calc(self, result, num, op):
-        if op ==  "+":
-            return result + num
-        else:
-            return result - num
-
+        return result
