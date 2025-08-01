@@ -2,7 +2,8 @@ class Solution:
     def calculate(self, s: str) -> int:
         stack = []
         op = "+"
-        while idx <len(s):
+        idx = 0
+        while idx < len(s):
             char = s[idx]
             if char == " ":
                 idx += 1
