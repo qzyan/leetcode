@@ -20,7 +20,7 @@ class Solution:
             elif char == ")":
                 num1 = results.pop()
                 op = ops.pop()
-                result = (num1 + result) if op == "+" else (num1 + result)
+                result = (num1 + result) if op == "+" else (num1 - result)
                 idx += 1
             elif char in "+-":
                 op = char
