@@ -8,49 +8,56 @@ class Solution:
         if not head:
             return None
 
-        size = 1
-        dummy = ListNode()
-        dummy.next = head
+        group_idx = 1
         curr_node = head
-        prev_node = dummy
-        while curr_node:
-            last_node, group_size = self.get_last_node(curr_node, size)
-            if group_size % 2 == 1:
-                prev_node = last_node
-                curr_node = last_node.next
-                size += 1
-            else:
-                next_node = last_node.next
-                last_node.next = None
-                self.reverse(curr_node, last_node)
-                prev_node.next = last_node
-                prev_node = curr_node
-                curr_node.next = next_node
-                curr_node = next_node
-                size += 1
-
-        return dummy.next
-
-    def reverse(self, head, tail):
         prev_node = None
-        node = head
+
+        while curr_node:
+            tail, size = self.get_tail(curr_node, group_idx)
+            if size % 2 != 0:
+                curr_node = tail.next
+                prev_node = tail
+                group_idx += 1
+                continue
+
+            next_head = tail.next
+            # split
+            tail.next = None
+            self.reverse(curr_node)
+            # link with prev group tail
+            prev_node.next = tail
+            prev_node = curr_node
+            # link with next group
+            prev_node.next = next_head
+
+            curr_node = next_head
+            group_idx += 1
+
+        return head
+
+    def get_tail(self, curr_node, k):
+        node = curr_node
+        size = 1
+        while node.next and size < k:
+            node = node.next
+            size += 1
+
+        return node, size
+
+    def reverse(self, node):
+        prev_node = None
+
         while node:
             next_node = node.next
             node.next = prev_node
             prev_node = node
             node = next_node
 
-    def get_last_node(self, head, size):
-        k = 1
-        while head.next:
-            if k == size:
-                break
-            
-            k += 1
-            head = head.next
+
         
-        return head, k
+
+
+
+
             
-
-
 
