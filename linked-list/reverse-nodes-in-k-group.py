@@ -9,42 +9,41 @@ class Solution:
         dummy.next = head
 
         curr_node = head
-        prev_tail = dummy
+        prev_node = dummy
         while curr_node:
-            last_node, next_head = self.split(curr_node, k)
-            if last_node is None:
+            tail, next_node = self.split(curr_node, k)
+            # last batch, not enough nodes
+            if not tail:
                 break
             
-            self.reverse(curr_node, last_node)
-            prev_tail.next = last_node
-            curr_node.next = next_head
-            prev_tail = curr_node
-            curr_node = next_head
+            new_head = self.reverse(curr_node)
+            prev_node.next = new_head
+            curr_node.next = next_node
+
+            prev_node = curr_node
+            curr_node = next_node
 
         return dummy.next
+
+    def reverse(self, head):
+        prev_node = None
+        while head:
+            next_node = head.next
+            head.next = prev_node
+            prev_node = head
+            head = next_node
+        
+        return prev_node
 
     def split(self, node, k):
         while node and k > 1:
             node = node.next
             k -= 1
-
+        
         if node is None:
             return None, None
         
-        next_head = node.next
+        new_head = node.next
         node.next = None
-        return node, next_head
 
-    def reverse(self, left_node, right_node):
-        prev_node = None
-        node = left_node
-        while node:
-            next_node = node.next
-            node.next = prev_node
-            prev_node = node
-            node = next_node
-
-        
-
-
-
+        return node, new_head
