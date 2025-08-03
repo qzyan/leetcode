@@ -6,33 +6,19 @@
 #         self.right = right
 class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
-        queue = collections.deque([root])
-        while queue:
-            vals_in_level = []
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                if node:
-                    vals_in_level.append(node.val)
-                    queue.append(node.left)
-                    queue.append(node.right)
-                else:
-                    vals_in_level.append("N")
+        if not root:
+            return True
 
-            if not self.is_symmetric(vals_in_level):
-                return False
-        
-        return True
+        return self.helper(root.left, root.right)
 
-    def is_symmetric(self, vals):
-        left, right = 0, len(vals) - 1
-        while left < right:
-            if vals[left] != vals[right]:
-                return False
-            
-            left += 1
-            right -= 1
+    def helper(self, node1, node2):
+        if not node1 and not node2:
+            return True
 
-        return True
-                
+        if not node1 or not node2:
+            return False
 
+        if node1.val != node2.val:
+            return False
 
+        return self.helper(node1.left, node2.right) and self.helper(node1.right, node2.left)
