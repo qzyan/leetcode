@@ -10,7 +10,7 @@ class Solution:
 
     def helper(self, root, curr_sum):
         if not root:
-            return curr_sum
+            return 0
 
         curr_sum = curr_sum * 10 + root.val
         if not root.left and not root.right:
