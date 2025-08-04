@@ -11,10 +11,15 @@ class BSTIterator:
         self.push_all_left(root)
 
     def next(self) -> int:
-        curr_node = self.stack.pop()
+        curr_node = self.stack[-1]
         if curr_node.right:
             self.push_all_left(curr_node.right)
+            return curr_node.val
         
+        last_node = self.stack.pop()
+        while self.stack and self.stack[-1].right == last_node:
+            last_node = self.stack.pop()
+
         return curr_node.val
         
     def hasNext(self) -> bool:
