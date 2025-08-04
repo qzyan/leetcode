@@ -4,7 +4,10 @@ class Solution:
         return [self.dfs(q[0], q[1], set(), graph) for q in queries]
 
     def dfs(self, start, end, visited, graph):
-        if graph[start][end] != 0.0:
+        if start not in graph:
+            return -1.0
+        
+        if end in graph[start]:
             return graph[start][end]
         
         visited.add(start)
@@ -28,9 +31,8 @@ class Solution:
             value = values[idx]
 
             graph[char1][char2] = value
-            graph[char2][char1] = 1 / value
+            graph[char2][char1] = 1.0 / value
             graph[char1][char1] = 1.0
             graph[char2][char2] = 1.0
-
 
         return graph
