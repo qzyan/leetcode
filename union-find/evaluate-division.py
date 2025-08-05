@@ -4,7 +4,9 @@ class Solution:
         results = []
         visited = set()
         for q in queries:
+            visited.add(q[0])
             result = self.dfs(q[0], q[1], visited, graph)
+            visited.remove(q[0])
             results.append(result)
 
         return results
@@ -19,17 +21,17 @@ class Solution:
         if end in graph[start]:
             return graph[start][end]
 
-        visited.add(start)
         for next_word in graph[start]:
             if next_word in visited:
                 continue
             
+            visited.add(next_word)
             sub_res = self.dfs(next_word, end, visited, graph)
+            visited.remove(next_word)
+
             if sub_res != -1.0:
                 return sub_res * graph[start][next_word]
-        
-        visited.remove(start)
-            
+                    
         return -1.0
 
     def build_graph(self, equations, values):
