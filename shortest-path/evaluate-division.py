@@ -1,38 +1,44 @@
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         graph = self.build_graph(equations, values)
-        return [self.dfs(q[0], q[1], set(), graph) for q in queries]
+        results = []
+        visited = set()
+        for q in queries:
+            result = self.dfs(q[0], q[1], visited, graph)
+            results.append(result)
+
+        return results
 
     def dfs(self, start, end, visited, graph):
         if start not in graph:
             return -1.0
+
+        if start == end:
+            return 1.0
         
         if end in graph[start]:
             return graph[start][end]
-        
-        visited.add(start)
-        for next_char in graph[start]:
-            if next_char in visited:
-                continue
 
-            sub_res = self.dfs(next_char, end, visited, graph)
+        visited.add(start)
+        for next_word in graph[start]:
+            if next_word in visited:
+                continue
+            
+            sub_res = self.dfs(next_word, end, visited, graph)
             if sub_res != -1.0:
-                return sub_res * graph[start][next_char]
+                return sub_res * graph[start][next_word]
         
         visited.remove(start)
-        
+            
         return -1.0
-        
 
     def build_graph(self, equations, values):
         graph = defaultdict(lambda :defaultdict(float))
         for idx in range(len(equations)):
-            char1, char2 = equations[idx]
-            value = values[idx]
+            word1, word2 = equations[idx]
+            val = values[idx]
 
-            graph[char1][char2] = value
-            graph[char2][char1] = 1.0 / value
-            graph[char1][char1] = 1.0
-            graph[char2][char2] = 1.0
+            graph[word1][word2] = val
+            graph[word2][word1] = 1.0 / val
 
         return graph
