@@ -5,23 +5,28 @@ class Solution:
 
         # count = self.bfs(graph, course_indegree)
         takens = set()
-        self.dfs(graph, course_indegree, takens)
+        to_take = []
+        for course, indegree in course_indegree.items():
+            if indegree == 0:
+                to_take.append(course)
+                takens.add(course)
+        self.dfs(graph, course_indegree, takens, to_take)
         count = len(takens)
         return count == numCourses
 
-    def dfs(self, graph, course_indegree, takens):
-        new_course_taken = False
-        for course, indegree in course_indegree.items():
-            if indegree == 0 and course not in takens:
-                takens.add(course)
-                for next_course in graph[course]:
-                    course_indegree[next_course] -= 1
-                new_course_taken = True
-        
-        if new_course_taken:
-            self.dfs(graph, course_indegree, takens)
-                
+    def dfs(self, graph, course_indegree, takens, to_take):
+        if not to_take:
+            return
 
+        next_to_takes = []
+        for course in to_take:
+            for next_course in graph[course]:
+                course_indegree[next_course] -= 1
+                if course_indegree[next_course] == 0:
+                    next_to_takes.append(next_course)
+                    takens.add(next_course)
+
+        self.dfs(graph, course_indegree, takens, next_to_takes)
 
     def bfs(self, graph, course_indegree):
         queue = collections.deque()
