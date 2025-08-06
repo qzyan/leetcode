@@ -17,7 +17,7 @@ class Solution:
             return 0
         
         res = float("inf")
-        for i in range(start, end + 1):
+        for i in range(start, end):
             curr_res = i + max(self.dfs(start, i - 1, memo), self.dfs(i + 1, end, memo))
             res = min(res, curr_res)
 
