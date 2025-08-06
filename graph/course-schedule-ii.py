@@ -14,7 +14,7 @@ class Solution:
                 path.pop()
                 visited.remove(course)
 
-        return paths[0]
+        return paths[0] if paths else []
 
     def dfs(self, graph, course_indegree, path, paths, visited):
         if len(path) == len(graph):
