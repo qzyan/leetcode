@@ -1,66 +1,57 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         graph = self.build_graph(numCourses, prerequisites)
-        indegrees = self.get_indegrees(numCourses, graph)
-        results = []
-        self.dfs([], set(), results, graph, indegrees, numCourses)
-        return results[0] if len(results) > 0 else []
-        # bfs
-        # return self.bfs(graph, indegrees, numCourses)
+        course_indegree = self.calc_indegree(graph)
 
-    def dfs(self, path, takens, results, graph, indegrees, numCourses):
-        if len(path) == numCourses:
-            results.append(path[:])
+        paths = []
+        path = []
+        visited = set()
+        for course, indegree in course_indegree.items():
+            if indegree == 0:
+                path.append(course)
+                visited.add(course)
+                self.dfs(graph, course_indegree, path, paths, visited)
+                path.pop()
+                visited.remove(course)
+
+        return paths[0]
+
+    def dfs(self, graph, course_indegree, path, paths, visited):
+        if len(path) == len(graph):
+            paths.append(path[:])
             return
+        
+        curr_course = path[-1]
+        for next_course in graph[curr_course]:
+            course_indegree[next_course] -= 1
 
-        for course, indegree in indegrees.items():
-            if course in takens:
+        for next_course in graph:
+            if next_course in visited:
                 continue
 
-            if indegree == 0:
-                takens.add(course)
-                path.append(course)
-                for next_c in graph[course]:
-                    indegrees[next_c] -= 1
-
-                self.dfs(path, takens, results, graph, indegrees, numCourses)
-
-                takens.remove(course)
+            if course_indegree[next_course] == 0:
+                path.append(next_course)
+                visited.add(next_course)
+                self.dfs(graph, course_indegree, path, paths, visited)
                 path.pop()
-                for next_c in graph[course]:
-                    indegrees[next_c] += 1
+                visited.remove(next_course)
 
-        return
+        for next_course in graph[curr_course]:
+            course_indegree[next_course] += 1
 
-
-    def bfs(self, graph, indegrees, numCourses):
-        queue = collections.deque()
-        for course, indegree in indegrees.items():
-            if indegree == 0:
-                queue.append(course)
-        sorted_courses = []
-        while queue:
-            curr_course = queue.popleft()
-            sorted_courses.append(curr_course)
-            for next_course in graph[curr_course]:
-                indegrees[next_course] -= 1
-                if indegrees[next_course] == 0:
-                    queue.append(next_course)
-
-        return sorted_courses if len(sorted_courses) == numCourses else []
-
-    def build_graph(self, num, prereqs):
-        graph = {i: [] for i in range(num)}
-
-        for to_c, from_c in prereqs:
-            graph[from_c].append(to_c)
+    def build_graph(self, numCourses, prerequisites):
+        graph = {c: set() for c in range(numCourses)}
+        for to_c, from_c in prerequisites:
+            graph[from_c].add(to_c)
 
         return graph
 
-    def get_indegrees(self, num, graph):
-        indegrees = {i: 0 for i in range(num)}
+    def calc_indegree(self, graph):
+        course_indegree = {c: 0 for c in graph}
         for from_c, to_cs in graph.items():
             for to_c in to_cs:
-                indegrees[to_c] += 1
+                course_indegree[to_c] += 1
 
-        return indegrees
+        return course_indegree
+
+            
