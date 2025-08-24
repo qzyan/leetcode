@@ -8,6 +8,7 @@ class Solution:
         while queue:
             for _ in range(len(queue)):
                 curr_idx = queue.popleft()
+
                 if curr_idx == n ** 2:
                     return step
 
@@ -23,6 +24,7 @@ class Solution:
                     if board[row][col] != -1:
                         if board[row][col] not in visited:
                             queue.append(board[row][col])
+                            visited.add(board[row][col])
                     else:
                         queue.append(next_idx)
                         visited.add(next_idx)
