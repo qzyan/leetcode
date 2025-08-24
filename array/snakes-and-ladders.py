@@ -24,7 +24,7 @@ class Solution:
                     if board[row][col] != -1:
                         if board[row][col] not in visited:
                             queue.append(board[row][col])
-                            visited.add(board[row][col])
+                            visited.add(next_idx)
                     else:
                         queue.append(next_idx)
                         visited.add(next_idx)
