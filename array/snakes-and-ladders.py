@@ -14,14 +14,15 @@ class Solution:
                 for i in range(1, 7):
                     next_idx = curr_idx + i
                     if next_idx > n ** 2:
-                        continue
+                        break
 
                     if next_idx in visited:
                         continue
                     
                     row, col = self.get_pos(board, next_idx)
                     if board[row][col] != -1:
-                        queue.append(board[row][col])
+                        if board[row][col] not in visited:
+                            queue.append(board[row][col])
                     else:
                         queue.append(next_idx)
                         visited.add(next_idx)
