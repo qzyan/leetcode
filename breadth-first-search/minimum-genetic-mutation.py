@@ -17,6 +17,7 @@ class Solution:
                         continue
                     
                     queue.append(next_gene)
+                    visited.add(next_gene)
 
             step += 1
 
