@@ -8,6 +8,7 @@ class Solution:
         while queue:
             for _ in range(len(queue)):
                 curr_gene = queue.popleft()
+
                 if curr_gene == endGene:
                     return step
 
@@ -25,6 +26,9 @@ class Solution:
         neighbors = []
         for idx in range(len(curr_gene)):
             for char in "ACGT":
+                if char == curr_gene[idx]:
+                    continue
+
                 new_gene = curr_gene[:idx] + char + curr_gene[idx + 1:]
 
                 if new_gene in bank:
