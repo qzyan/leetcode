@@ -35,9 +35,6 @@ class WordDictionary:
         return self.helper(node, word, 0)
 
     def helper(self, node, word, start_idx):
-        if start_idx == len(word):
-            return True
-
         for idx in range(start_idx, len(word)):
             char = word[idx]
             if char != ".":
