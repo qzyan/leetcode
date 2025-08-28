@@ -49,6 +49,9 @@ class Solution:
     def dfs(self, paths, row_idx, col_idx, visited, node, board):
         if node.is_word:
             paths.append(node.word)
+        
+        if not node.children:
+            return
 
         for next_row, next_col in self.get_neighbors(row_idx, col_idx, board):
             if (next_row, next_col) in visited:
