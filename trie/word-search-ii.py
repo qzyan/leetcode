@@ -41,7 +41,7 @@ class Solution:
                 path.pop()
                 visited.remove((row_idx, col_idx))
 
-        return paths
+        return list(set(paths))
 
     def build_trie(self, words):
         trie = Trie()
