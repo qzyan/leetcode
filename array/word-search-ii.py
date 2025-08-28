@@ -25,8 +25,6 @@ class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         trie = self.build_trie(words)
         node = trie.root
-        words = set(words)
-        path = []
         paths = []
         visited = set()
         for row_idx in range(len(board)):
@@ -35,10 +33,8 @@ class Solution:
                 if curr_char not in node.children:
                     continue
 
-                path.append(curr_char)
                 visited.add((row_idx, col_idx))
-                self.dfs(path, paths, row_idx, col_idx, visited, node.children[curr_char], board, words)
-                path.pop()
+                self.dfs(paths, row_idx, col_idx, visited, node.children[curr_char], board)
                 visited.remove((row_idx, col_idx))
 
         return list(set(paths))
@@ -50,10 +46,9 @@ class Solution:
         
         return trie
 
-    def dfs(self, path, paths, row_idx, col_idx, visited, node, board, words):
-        curr_word = "".join(path)
-        if curr_word in words:
-            paths.append(curr_word)
+    def dfs(self, paths, row_idx, col_idx, visited, node, board):
+        if node.is_word:
+            paths.append(node.word)
 
         for next_row, next_col in self.get_neighbors(row_idx, col_idx, board):
             if (next_row, next_col) in visited:
@@ -61,10 +56,8 @@ class Solution:
             
             next_char = board[next_row][next_col]
             if next_char in node.children:
-                path.append(next_char)
                 visited.add((next_row, next_col))
-                self.dfs(path, paths, next_row, next_col, visited, node.children[next_char], board, words)
-                path.pop()
+                self.dfs(paths, next_row, next_col, visited, node.children[next_char], board)
                 visited.remove((next_row, next_col))
 
     def get_neighbors(self, row_idx, col_idx, board):
