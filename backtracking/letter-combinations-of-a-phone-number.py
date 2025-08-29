@@ -11,17 +11,15 @@ class Solution:
             "9": "wxyz"
         }
 
-        results = []
+        results = deque([])
         for digit in digits:
             if not results:
                 for char in digit_chars[digit]:
                     results.append(char)
             else:
-                new_results = []
-                for result in results:
+                for _ in range(len(results)):
+                    curr_comb = results.popleft()
                     for char in digit_chars[digit]:
-                        new_results.append(result + char)
+                        results.append(curr_comb + char)
 
-                results = new_results
-
-        return results
+        return list(results)
