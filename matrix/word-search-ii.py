@@ -5,12 +5,11 @@ class Trie:
     def add(self, word):
         node = self.root
         for char in word:
-            if char in node.children:
-                node = node.children[char]
-            else:
-                new_node = TrieNode() 
+            if char not in node.children:
+                new_node = TrieNode()
                 node.children[char] = new_node
-                node = new_node
+            
+            node = node.children[char]
 
         node.is_word = True
         node.word = word
@@ -25,45 +24,48 @@ class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         trie = self.build_trie(words)
         node = trie.root
-        paths = []
+
         visited = set()
+        results = set()
         for row_idx in range(len(board)):
             for col_idx in range(len(board[0])):
-                curr_char = board[row_idx][col_idx]
-                if curr_char not in node.children:
+                char = board[row_idx][col_idx]
+                if char not in node.children:
                     continue
-
+                
                 visited.add((row_idx, col_idx))
-                self.dfs(paths, row_idx, col_idx, visited, node.children[curr_char], board)
+                self.dfs(board, row_idx, col_idx, node.children[char], visited, results)
                 visited.remove((row_idx, col_idx))
 
-        return list(set(paths))
+        return list(results)
 
     def build_trie(self, words):
         trie = Trie()
         for word in words:
             trie.add(word)
-        
+
         return trie
 
-    def dfs(self, paths, row_idx, col_idx, visited, node, board):
+    def dfs(self, board, row_idx, col_idx, node, visited, results):
         if node.is_word:
-            paths.append(node.word)
+            results.add(node.word)
         
         if not node.children:
             return
-
-        for next_row, next_col in self.get_neighbors(row_idx, col_idx, board):
+        
+        for next_row, next_col in self.get_neighbors(board, row_idx, col_idx):
             if (next_row, next_col) in visited:
                 continue
             
-            next_char = board[next_row][next_col]
-            if next_char in node.children:
-                visited.add((next_row, next_col))
-                self.dfs(paths, next_row, next_col, visited, node.children[next_char], board)
-                visited.remove((next_row, next_col))
+            char = board[next_row][next_col]
+            if char not in node.children:
+                continue
+            
+            visited.add((next_row, next_col))
+            self.dfs(board, next_row, next_col, node.children[char], visited, results)
+            visited.remove((next_row, next_col))
 
-    def get_neighbors(self, row_idx, col_idx, board):
+    def get_neighbors(self, board, row_idx, col_idx):
         neighbors = []
         for d_row, d_col in DIRECTIONS:
             next_row, next_col = d_row + row_idx, d_col + col_idx
@@ -72,10 +74,4 @@ class Solution:
 
         return neighbors
 
-
 DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-
-
-        
-
-        
