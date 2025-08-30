@@ -1,23 +1,22 @@
+1;2;3
+1,2;1,3;1,4;2,3;2,4;3,4
+
 class Solution:
     def combine(self, n: int, k: int) -> List[List[int]]:
-        path = []
-        paths = []
-        
-        self.dfs(path, paths, k, 1, n)
+        queue = deque([])
 
-        return paths
+        for i in range(k):
+            if not queue:
+                for num in range(1, n + 2 - k):
+                    queue.append([num])
 
-    def dfs(self, path, paths, k, start_num, n):
-        if len(path) == k:
-            paths.append(path[:])
-            return
+                continue
 
-        for i in range(start_num, n + 1):
-            if n + 1 - i + len(path) < k:
-                break
+            for idx in range(len(queue)):
+                curr_comb = queue.popleft()
+                last_digit = curr_comb[-1]
+                for digit in range(last_digit + 1, n + 2 - k + i):
+                    comb = curr_comb + [digit]
+                    queue.append(comb)
 
-            path.append(i)
-            self.dfs(path, paths, k, i + 1, n)
-            path.pop()
-
-        
+        return list(queue)
