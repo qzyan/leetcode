@@ -28,7 +28,7 @@ class Solution:
         node = trie.root
         visited = set()
         results = set()
-        max_len = max([len(word) for word in words])
+
         for row_idx in range(len(board)):
             for col_idx in range(len(board[0])):
                 char = board[row_idx][col_idx]
@@ -36,7 +36,7 @@ class Solution:
                     continue
                 
                 visited.add((row_idx, col_idx))
-                self.dfs(board, row_idx, col_idx, node.children[char], results, visited, 1, max_len)
+                self.dfs(board, row_idx, col_idx, node.children[char], results, visited)
                 visited.remove((row_idx, col_idx))
 
         return list(results)
@@ -48,11 +48,11 @@ class Solution:
 
         return trie
 
-    def dfs(self, board, row_idx, col_idx, node, results, visited, curr_len, max_len):
+    def dfs(self, board, row_idx, col_idx, node, results, visited):
         if node.is_word:
             results.add(node.word)
         
-        if curr_len == max_len:
+        if not node.children:
             return
 
         for next_row, next_col in self.get_neighbors(board, row_idx, col_idx):
@@ -64,7 +64,7 @@ class Solution:
                 continue
 
             visited.add((next_row, next_col))
-            self.dfs(board, next_row, next_col, node.children[next_char], results, visited, curr_len + 1, max_len)
+            self.dfs(board, next_row, next_col, node.children[next_char], results, visited)
             visited.remove((next_row, next_col))            
 
     def get_neighbors(self, board, row_idx, col_idx):
