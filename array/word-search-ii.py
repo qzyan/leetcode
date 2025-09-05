@@ -1,32 +1,34 @@
-class Trie:
+class TrieNode:
+    def __init__(self):
+        self.is_word = False
+        self.word = ""
+        self.children = {}
+
+class TRIE:
     def __init__(self):
         self.root = TrieNode()
 
-    def add(self, word):
+    def add_word(self, word):
         node = self.root
         for char in word:
-            if char not in node.children:
+            if char in node.children:
+                node = node.children[char]
+            else:
                 new_node = TrieNode()
                 node.children[char] = new_node
-            
-            node = node.children[char]
+                node = node.children[char]
 
         node.is_word = True
         node.word = word
 
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.is_word = False
-        self.word = ""
 
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         trie = self.build_trie(words)
         node = trie.root
-
         visited = set()
         results = set()
+        max_len = max([len(word) for word in words])
         for row_idx in range(len(board)):
             for col_idx in range(len(board[0])):
                 char = board[row_idx][col_idx]
@@ -34,36 +36,36 @@ class Solution:
                     continue
                 
                 visited.add((row_idx, col_idx))
-                self.dfs(board, row_idx, col_idx, node.children[char], visited, results)
+                self.dfs(board, row_idx, col_idx, node.children[char], results, visited, 1, max_len)
                 visited.remove((row_idx, col_idx))
 
         return list(results)
 
     def build_trie(self, words):
-        trie = Trie()
+        trie = TRIE()
         for word in words:
-            trie.add(word)
+            trie.add_word(word)
 
         return trie
 
-    def dfs(self, board, row_idx, col_idx, node, visited, results):
+    def dfs(self, board, row_idx, col_idx, node, results, visited, curr_len, max_len):
         if node.is_word:
             results.add(node.word)
         
-        if not node.children:
+        if curr_len == max_len:
             return
-        
+
         for next_row, next_col in self.get_neighbors(board, row_idx, col_idx):
             if (next_row, next_col) in visited:
                 continue
             
-            char = board[next_row][next_col]
-            if char not in node.children:
+            next_char = board[next_row][next_col]
+            if next_char not in node.children:
                 continue
-            
+
             visited.add((next_row, next_col))
-            self.dfs(board, next_row, next_col, node.children[char], visited, results)
-            visited.remove((next_row, next_col))
+            self.dfs(board, next_row, next_col, node.children[next_char], results, visited, curr_len + 1, max_len)
+            visited.remove((next_row, next_col))            
 
     def get_neighbors(self, board, row_idx, col_idx):
         neighbors = []
@@ -74,4 +76,5 @@ class Solution:
 
         return neighbors
 
-DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+DIRECTIONS = ((1, 0), (-1, 0), (0, -1), (0, 1))
+
