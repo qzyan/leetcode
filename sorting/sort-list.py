@@ -9,14 +9,16 @@ class Solution:
             return None
 
         heap = []
+        idx = 0
         while head:
-            heapq.heappush(heap, (head.val, head))
+            heapq.heappush(heap, (head.val, idx, head))
             head = head.next
+            idx += 1
 
         dummy = ListNode()
         tail = dummy
         while heap:
-            val, node = heapq.heappop(heap)
+            val, idx, node = heapq.heappop(heap)
             tail.next = node
             tail = tail.next
 
