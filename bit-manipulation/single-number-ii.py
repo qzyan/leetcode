@@ -13,4 +13,4 @@ class Solution:
             if count % 3 != 0:
                 res += 1 << bit
 
-        return res
+        return res if bit_count[-1] % 3 == 0 else res - (1 << 32)
